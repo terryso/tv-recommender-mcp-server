@@ -24,45 +24,58 @@
 - **外部API:** TMDb (The Movie Database)
 - **环境变量管理:** dotenv
 
+## 快速开始
+
+使用npx可以快速运行服务器，无需安装：
+
+```bash
+# 设置TMDb API密钥（必须）
+export TMDB_API_KEY=your_api_key_here
+
+# 运行服务器
+npx tv-recommender-mcp-server
+```
+
 ## 安装步骤
 
 1. 从NPM安装
    ```bash
-   npm install tv-recommender-mcp-server
+   npm install -g tv-recommender-mcp-server
    ```
 
-2. 或者克隆仓库
+2. 配置环境变量
+   ```bash
+   export TMDB_API_KEY=your_api_key_here
+   ```
+
+3. 运行服务器
+   ```bash
+   tv-recommender-mcp-server
+   ```
+
+或者，您可以克隆仓库：
+
+1. 克隆仓库
    ```bash
    git clone <仓库地址>
    cd tv-recommender-mcp-server
    ```
 
-3. 安装依赖
+2. 安装依赖
    ```bash
    npm install
    ```
 
-4. 配置环境变量
+3. 配置环境变量
    - 复制`.env-example`为`.env`
    - 在[TMDb](https://www.themoviedb.org/)申请API密钥
    - 将API密钥填入`.env`文件的`TMDB_API_KEY`字段
 
-5. 构建项目
+4. 构建并运行项目
    ```bash
    npm run build
+   npm start
    ```
-
-## 运行服务器
-
-```bash
-npm start
-```
-
-## 开发模式
-
-```bash
-npm run dev
-```
 
 ## 在Cursor中配置MCP服务器
 
@@ -70,21 +83,21 @@ npm run dev
 
 1. 在项目根目录创建（或编辑）`.cursor/mcp.json`文件
 
-2. 在文件中配置服务器信息，格式如下：
+2. 在文件中配置服务器信息，格式如下（使用npx方式）：
    ```json
    {
      "mcpServers": {
        "TVRecommender": {
-         "command": "node",
+         "command": "npx",
          "args": [
-           "dist/server.js"
+           "tv-recommender-mcp-server"
          ]
        }
      }
    }
    ```
 
-3. 也可以使用环境变量传递配置（如API密钥）：
+3. 使用环境变量传递TMDb API密钥：
    ```json
    {
      "mcpServers": {
@@ -92,8 +105,8 @@ npm run dev
          "command": "env",
          "args": [
            "TMDB_API_KEY=your_api_key_here",
-           "node",
-           "dist/server.js"
+           "npx",
+           "tv-recommender-mcp-server"
          ]
        }
      }
@@ -108,7 +121,7 @@ npm run dev
 
 6. 如需调试或查看日志：
    - 在Cursor的开发者工具中（按 `Cmd+Option+I` 打开）查看控制台输出
-   - 通过环境变量启用调试模式：`"DEBUG=mcp:*,node dist/server.js"`
+   - 通过环境变量启用调试模式：`"DEBUG=mcp:*,npx tv-recommender-mcp-server"`
 
 ## 工具说明
 
@@ -117,6 +130,14 @@ npm run dev
 1. **get_recommendations_by_genre** - 按类型获取剧集推荐
 2. **get_similar_shows** - 获取与指定剧集相似的推荐
 3. **get_show_details** - 获取指定剧集的详细信息
+
+## 开发模式
+
+如果您希望参与开发，可以使用以下命令启动开发模式：
+
+```bash
+npm run dev
+```
 
 ## 发布到NPM
 
