@@ -9,19 +9,33 @@ A TV show recommendation MCP server based on the TMDb API, providing recommendat
 
 This project is an MCP (Model Context Protocol) server designed to provide comprehensive TV show recommendations and information query services. The server communicates with MCP-enabled clients via standard input/output (stdio) and retrieves data by calling the TMDb (The Movie Database) API. The service covers various aspects, from show discovery and detail queries to watch providers, actor information, and user reviews, offering users a one-stop shop for exploring TV shows.
 
-## Features
+## Features & Roadmap
 
-- Communicates with clients via the MCP protocol
-- Provides TV show recommendations by genre
-- Provides recommendations for similar TV shows
-- Provides detailed TV show information queries
-- Queries watch providers for TV shows (streaming, rent, buy platforms)
-- Supports advanced show discovery with multiple combined criteria
-- Queries actor information and their credits
-- Gets currently popular and trending TV shows
-- Gets trailers and related videos for TV shows
-- Views user reviews for TV shows
-- Uses the TMDb API for the latest and most comprehensive show data
+Below is the complete feature list and development status (based on user stories in the `.ai` directory):
+
+**Epic 1: Core Recommendation Tools MVP**
+- [x] **MCP Server Basic Setup & API Integration** (`story-1-1-setup-integration.md`)
+- [x] **Recommend Shows by Genre** (`story-1-2-recommend-genre.md`) - Tool: `get_recommendations_by_genre`
+- [x] **Find Similar Shows** (`story-1-3-recommend-similar.md`) - Tool: `get_similar_shows`
+- [x] **Get Show Details** (`story-1-4-show-details.md`) - Tool: `get_show_details`
+
+**Epic 2: Enhancements & Expansion**
+- [ ] **Keyword/Theme Based Discovery** (`story-2-1-keyword-discovery.md`)
+- [ ] **Early Actor Works Discovery** (`story-2-2-early-works.md`)
+- [ ] **Detailed Episode Information & Interaction** (`story-2-3-episode-details.md`)
+- [ ] **Provider/Network/Company Content Aggregation** (`story-2-4-provider-aggregation.md`)
+- [x] **Query Actor Information and Credits** (`story-2-5-actor-info.md`) - Tool: `get_actor_details_and_credits`, `find_shows_by_actor`, `get_recommendations_by_actor`
+- [x] **Implement Advanced Show Discovery** (`story-2-6-advanced-discovery.md`) - Tool: `discover_shows`
+- [x] **Query Popular and Trending Shows** (`story-2-7-popular-trending.md`) - Tool: `get_popular_shows`, `get_trending_shows`
+- [x] **Query Show User Reviews** (`story-2-8-reviews-ratings.md`) - Tool: `get_show_reviews`
+- [x] **Query Show Trailers and Videos** (`story-2-9-trailers.md`) - Tool: `get_show_videos`
+- [x] **Query Show Watch Providers** (`story-2-10-watch-providers.md`) - Tool: `get_watch_providers`
+
+**Epic 3: Personalization & Integration**
+- [ ] **Smart Watch Progress Management** (`story-3-1-watch-progress.md`)
+
+**Epic 4: Visualization & Exploration**
+- [ ] **Visual Franchise/Universe Exploration** (`story-4-1-franchise-visualization.md`)
 
 ## Tech Stack
 
@@ -236,31 +250,3 @@ Feel free to submit Issues and Pull Requests to help improve this project.
 ## License
 
 [MIT](LICENSE) © 2023-present 
-
-## Roadmap
-
-Below is the complete project roadmap (based on user stories in the `.ai` directory):
-
-**Epic 1: Core Recommendation Tools MVP**
-- [x] Story 1.1: MCP Server Basic Setup & API Integration (`story-1-1-setup-integration.md`)
-- [x] Story 1.2: Implement `get_recommendations_by_genre` Tool (`story-1-2-recommend-genre.md`)
-- [x] Story 1.3: Implement `get_similar_shows` Tool (`story-1-3-recommend-similar.md`)
-- [x] Story 1.4: Implement `get_show_details` Tool (`story-1-4-show-details.md`)
-
-**Epic 2: Enhancements & Expansion**
-- [ ] Story 2.1: Keyword/Theme Based Discovery (`story-2-1-keyword-discovery.md`)
-- [ ] Story 2.2: Early Actor Works Discovery (`story-2-2-early-works.md`)
-- [ ] Story 2.3: Detailed Episode Information and Interaction (`story-2-3-episode-details.md`)
-- [ ] Story 2.4: Provider/Network/Company Content Aggregation (`story-2-4-provider-aggregation.md`)
-- [x] Story 2.5: Query Actor Information and Credits (`story-2-5-actor-info.md`)
-- [x] Story 2.6: Implement Advanced Show Discovery (`story-2-6-advanced-discovery.md`)
-- [x] Story 2.7: Query Popular and Trending Shows (`story-2-7-popular-trending.md`)
-- [x] Story 2.8: Query Show User Reviews (`story-2-8-reviews-ratings.md`)
-- [x] Story 2.9: Query Show Trailers and Videos (`story-2-9-trailers.md`)
-- [x] Story 2.10: Query Show Watch Providers (`story-2-10-watch-providers.md`)
-
-**Epic 3: Personalization & Integration**
-- [ ] Story 3.1: Smart Watch Progress Management (`story-3-1-watch-progress.md`)
-
-**Epic 4: Visualization & Exploration**
-- [ ] Story 4.1: Visual Franchise/Universe Exploration (`story-4-1-franchise-visualization.md`) 

@@ -8,19 +8,33 @@
 
 本项目是一个基于MCP(Model Context Protocol)的服务器，专门用于提供全面的美剧推荐和信息查询服务。服务器通过标准输入/输出(stdio)与支持MCP的客户端通信，并通过调用TMDb(The Movie Database) API获取数据。服务覆盖从剧集发现、详情查询到观看渠道、演员信息、用户评论等多方面功能，为用户提供一站式剧集探索体验。
 
-## 功能特点
+## 功能与路线图 (Features & Roadmap)
 
-- 通过MCP协议与客户端通信
-- 提供按类型推荐剧集功能
-- 提供相似剧集推荐功能
-- 提供剧集详情查询功能
-- 查询剧集观看渠道（流媒体、租赁、购买平台）
-- 支持多条件组合的高级剧集发现
-- 查询演员信息及其参演作品
-- 获取当前热门和趋势剧集
-- 获取剧集预告片和相关视频
-- 查看用户对剧集的评论
-- 使用TMDb API获取最新、最全面的剧集数据
+以下是本项目的完整功能列表及开发状态 (基于 `.ai` 目录下的用户故事):
+
+**Epic 1: 核心推荐工具 MVP (Core Recommendation Tools MVP)**
+- [x] **MCP 服务器基础设置与 API 集成 (MCP Server Setup & API Integration)** (`story-1-1-setup-integration.md`)
+- [x] **按类型推荐剧集 (Recommend Shows by Genre)** (`story-1-2-recommend-genre.md`) - 工具: `get_recommendations_by_genre`
+- [x] **查找相似剧集 (Find Similar Shows)** (`story-1-3-recommend-similar.md`) - 工具: `get_similar_shows`
+- [x] **获取剧集详情 (Get Show Details)** (`story-1-4-show-details.md`) - 工具: `get_show_details`
+
+**Epic 2: 增强与扩展 (Enhancements & Expansion)**
+- [ ] **基于关键词/主题发现 (Keyword/Theme Based Discovery)** (`story-2-1-keyword-discovery.md`)
+- [ ] **发现演员早期作品 (Early Actor Works Discovery)** (`story-2-2-early-works.md`)
+- [ ] **详细的单集信息与互动 (Detailed Episode Information & Interaction)** (`story-2-3-episode-details.md`)
+- [ ] **内容聚合(按平台/网络/公司) (Provider/Network/Company Content Aggregation)** (`story-2-4-provider-aggregation.md`)
+- [x] **查询演员信息及其作品 (Query Actor Information and Credits)** (`story-2-5-actor-info.md`) - 工具: `get_actor_details_and_credits`, `find_shows_by_actor`, `get_recommendations_by_actor`
+- [x] **高级剧集发现 (Advanced Show Discovery)** (`story-2-6-advanced-discovery.md`) - 工具: `discover_shows`
+- [x] **查询热门与趋势剧集 (Query Popular & Trending Shows)** (`story-2-7-popular-trending.md`) - 工具: `get_popular_shows`, `get_trending_shows`
+- [x] **查询剧集用户评论 (Query Show User Reviews)** (`story-2-8-reviews-ratings.md`) - 工具: `get_show_reviews`
+- [x] **查询剧集预告片与视频 (Query Show Trailers & Videos)** (`story-2-9-trailers.md`) - 工具: `get_show_videos`
+- [x] **查询剧集观看渠道 (Query Show Watch Providers)** (`story-2-10-watch-providers.md`) - 工具: `get_watch_providers`
+
+**Epic 3: 个性化与集成 (Personalization & Integration)**
+- [ ] **智能追剧进度管理 (Smart Watch Progress Management)** (`story-3-1-watch-progress.md`)
+
+**Epic 4: 可视化与探索 (Visualization & Exploration)**
+- [ ] **可视化系列/宇宙探索 (Visual Franchise/Universe Exploration)** (`story-4-1-franchise-visualization.md`)
 
 ## 技术栈
 
@@ -235,31 +249,3 @@ npm run dev
 ## 许可证
 
 [MIT](LICENSE) © 2023-present 
-
-## Roadmap
-
-以下是项目的完整路线图 (基于 `.ai` 目录下的用户故事):
-
-**Epic 1: 核心推荐工具 MVP**
-- [x] Story 1.1: MCP Server 基础设置与 API 集成 (`story-1-1-setup-integration.md`)
-- [x] Story 1.2: 实现 `get_recommendations_by_genre` 工具 (`story-1-2-recommend-genre.md`)
-- [x] Story 1.3: 实现 `get_similar_shows` 工具 (`story-1-3-recommend-similar.md`)
-- [x] Story 1.4: 实现 `get_show_details` 工具 (`story-1-4-show-details.md`)
-
-**Epic 2: 增强与扩展**
-- [ ] Story 2.1: Keyword/Theme Based Discovery (`story-2-1-keyword-discovery.md`)
-- [ ] Story 2.2: Early Actor Works Discovery (`story-2-2-early-works.md`)
-- [ ] Story 2.3: Detailed Episode Information and Interaction (`story-2-3-episode-details.md`)
-- [ ] Story 2.4: Provider/Network/Company Content Aggregation (`story-2-4-provider-aggregation.md`)
-- [x] Story 2.5: 查询演员信息及其作品 (`story-2-5-actor-info.md`)
-- [x] Story 2.6: 实现高级剧集发现功能 (`story-2-6-advanced-discovery.md`)
-- [x] Story 2.7: 查询热门与趋势剧集 (`story-2-7-popular-trending.md`)
-- [x] Story 2.8: 查询剧集用户评论 (`story-2-8-reviews-ratings.md`)
-- [x] Story 2.9: 查询剧集预告片与视频 (`story-2-9-trailers.md`)
-- [x] Story 2.10: 查询剧集观看渠道 (`story-2-10-watch-providers.md`)
-
-**Epic 3: 个性化与集成**
-- [ ] Story 3.1: Smart Watch Progress Management (`story-3-1-watch-progress.md`)
-
-**Epic 4: 可视化与探索**
-- [ ] Story 4.1: Visual Franchise/Universe Exploration (`story-4-1-franchise-visualization.md`) 
