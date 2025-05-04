@@ -10,7 +10,9 @@
     "test-api": "ts-node src/utils/testTMDbConnection.ts",
     "test-recommendations": "ts-node src/utils/testRecommendationsTool.ts",
     "test-similar": "ts-node src/utils/testSimilarShowsTool.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-details": "ts-node src/utils/testShowDetailsTool.ts",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [
     "mcp",
@@ -19,7 +21,7 @@
     "tmdb"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.0",
     "@types/node": "^20.12.2",
@@ -29,8 +31,22 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.0",
+    "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.ts",
+      "**/?(*.)+(spec|test).ts"
+    ]
   }
 }

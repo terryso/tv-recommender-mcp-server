@@ -26,23 +26,28 @@
 
 ## 安装步骤
 
-1. 克隆仓库
+1. 从NPM安装
+   ```bash
+   npm install tv-recommender-mcp-server
+   ```
+
+2. 或者克隆仓库
    ```bash
    git clone <仓库地址>
    cd tv-recommender-mcp-server
    ```
 
-2. 安装依赖
+3. 安装依赖
    ```bash
    npm install
    ```
 
-3. 配置环境变量
+4. 配置环境变量
    - 复制`.env-example`为`.env`
    - 在[TMDb](https://www.themoviedb.org/)申请API密钥
    - 将API密钥填入`.env`文件的`TMDB_API_KEY`字段
 
-4. 构建项目
+5. 构建项目
    ```bash
    npm run build
    ```
@@ -107,11 +112,21 @@ npm run dev
 
 ## 工具说明
 
-本MCP服务器提供以下工具(将在后续实现):
+本MCP服务器提供以下工具:
 
 1. **get_recommendations_by_genre** - 按类型获取剧集推荐
 2. **get_similar_shows** - 获取与指定剧集相似的推荐
 3. **get_show_details** - 获取指定剧集的详细信息
+
+## 发布到NPM
+
+本项目配置了GitHub Actions工作流，可以自动发布到NPM：
+
+1. 确保更新了`package.json`中的版本号
+2. 在GitHub上创建一个新的Release
+3. GitHub Actions会自动构建并发布到NPM
+
+您也可以手动触发工作流进行发布。
 
 ## 贡献指南
 
@@ -119,4 +134,4 @@ npm run dev
 
 ## 许可证
 
-[ISC](LICENSE) 
+[MIT](LICENSE) © 2023-present 
