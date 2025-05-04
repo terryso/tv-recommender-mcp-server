@@ -157,6 +157,187 @@ class TMDbClient {
       throw new Error(`获取剧集ID ${tvId} 的相似剧集失败: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
+
+  /**
+   * 获取剧集的观看渠道信息
+   * @param tvId 剧集ID
+   * @param countryCode 国家/地区代码，如"US"、"CN"等
+   * @returns 观看渠道信息
+   */
+  async getTvShowWatchProviders(tvId: number, countryCode = 'US') {
+    try {
+      const response = await this.client.get(`/tv/${tvId}/watch/providers`);
+      const results = response.data.results || {};
+      
+      // 返回指定国家/地区的观看渠道信息，如果没有则返回空对象
+      return {
+        id: tvId,
+        results: results[countryCode] || {}
+      };
+    } catch (error) {
+      // 记录错误并重新抛出
+      throw new Error(`获取剧集ID ${tvId} 的观看渠道失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 高级剧集发现API
+   * 支持多种筛选条件组合搜索
+   * @param params 搜索参数对象
+   * @returns 发现结果
+   */
+  async discoverTvShows(params: Record<string, string | number | boolean | string[] | number[]> = {}) {
+    try {
+      const response = await this.client.get('/discover/tv', {
+        params: {
+          ...params,
+          page: params.page || 1
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`高级剧集发现失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 搜索人物（演员、导演等）
+   * @param query 人物名称
+   * @returns 搜索结果
+   */
+  async searchPerson(query: string) {
+    try {
+      const response = await this.client.get('/search/person', {
+        params: { query }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`搜索人物"${query}"失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 搜索关键词
+   * @param query 关键词文本
+   * @returns 搜索结果
+   */
+  async searchKeyword(query: string) {
+    try {
+      const response = await this.client.get('/search/keyword', {
+        params: { query }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`搜索关键词"${query}"失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取人物详细信息
+   * @param personId 人物ID
+   * @returns 人物详细信息
+   */
+  async getPersonDetails(personId: number) {
+    try {
+      const response = await this.client.get(`/person/${personId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取人物ID ${personId} 的详细信息失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取电视网络列表
+   * @returns 电视网络列表
+   */
+  async getNetworks() {
+    try {
+      // TMDb没有提供networks列表的API，但我们可以通过公司companies接口获取部分数据
+      // 这里简化处理，实际应用中可能需要维护一个常用networks的映射表
+      const response = await this.client.get('/watch/providers/tv');
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取电视网络列表失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取人物的电视剧作品列表
+   * @param personId 人物ID
+   * @returns 人物参与的电视剧列表
+   */
+  async getPersonTvCredits(personId: number) {
+    try {
+      const response = await this.client.get(`/person/${personId}/tv_credits`);
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取人物ID ${personId} 的电视剧作品失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取剧集的用户评论
+   * @param tvId 剧集ID
+   * @param page 页码，默认为1
+   * @returns 用户评论列表
+   */
+  async getTvShowReviews(tvId: number, page = 1) {
+    try {
+      const response = await this.client.get(`/tv/${tvId}/reviews`, {
+        params: { page }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取剧集ID ${tvId} 的用户评论失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取热门剧集
+   * @param page 页码，默认为1
+   * @returns 热门剧集列表及分页信息
+   */
+  async getPopularTvShows(page = 1) {
+    try {
+      const response = await this.client.get('/tv/popular', {
+        params: { page }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取热门剧集失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取趋势剧集
+   * @param timeWindow 时间窗口，'day'表示日趋势，'week'表示周趋势
+   * @param page 页码，默认为1
+   * @returns 趋势剧集列表及分页信息
+   */
+  async getTrendingTvShows(timeWindow: 'day' | 'week' = 'week', page = 1) {
+    try {
+      const response = await this.client.get(`/trending/tv/${timeWindow}`, {
+        params: { page }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取${timeWindow === 'day' ? '日' : '周'}趋势剧集失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取剧集的预告片和相关视频
+   * @param tvId 剧集ID
+   * @returns 视频列表
+   */
+  async getTvShowVideos(tvId: number) {
+    try {
+      const response = await this.client.get(`/tv/${tvId}/videos`);
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取剧集ID ${tvId} 的预告片和视频失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
 }
 
 // 导出单例实例
