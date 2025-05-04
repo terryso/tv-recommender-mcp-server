@@ -1,23 +1,14 @@
-name: tv-recommender-mcp-server
-description: MCP server for TV show recommendations
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
 
-build:
-  type: docker
-  file: Dockerfile
-
-env:
-  - name: TMDB_API_KEY
-    description: TMDb API Key (required, get from https://www.themoviedb.org/)
-    required: true
-
-run:
-  command: node dist/server.js
-  cpu: 0.5
-  memory: 512Mi
-
-scale:
-  min: 1
-  max: 1
-
-docs:
-  readme: README.md 
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP
+    type: object
+    properties: {}
+    default: {}
+  commandFunction: 
+     # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'node', args: ['dist/server.js'], env: process.env })
+  exampleConfig: {}
