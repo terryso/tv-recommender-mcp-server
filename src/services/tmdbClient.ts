@@ -233,6 +233,20 @@ class TMDbClient {
   }
 
   /**
+   * 获取人物详细信息
+   * @param personId 人物ID
+   * @returns 人物详细信息
+   */
+  async getPersonDetails(personId: number) {
+    try {
+      const response = await this.client.get(`/person/${personId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取人物ID ${personId} 的详细信息失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
    * 获取电视网络列表
    * @returns 电视网络列表
    */
@@ -258,6 +272,70 @@ class TMDbClient {
       return response.data;
     } catch (error) {
       throw new Error(`获取人物ID ${personId} 的电视剧作品失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取剧集的用户评论
+   * @param tvId 剧集ID
+   * @param page 页码，默认为1
+   * @returns 用户评论列表
+   */
+  async getTvShowReviews(tvId: number, page = 1) {
+    try {
+      const response = await this.client.get(`/tv/${tvId}/reviews`, {
+        params: { page }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取剧集ID ${tvId} 的用户评论失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取热门剧集
+   * @param page 页码，默认为1
+   * @returns 热门剧集列表及分页信息
+   */
+  async getPopularTvShows(page = 1) {
+    try {
+      const response = await this.client.get('/tv/popular', {
+        params: { page }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取热门剧集失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取趋势剧集
+   * @param timeWindow 时间窗口，'day'表示日趋势，'week'表示周趋势
+   * @param page 页码，默认为1
+   * @returns 趋势剧集列表及分页信息
+   */
+  async getTrendingTvShows(timeWindow: 'day' | 'week' = 'week', page = 1) {
+    try {
+      const response = await this.client.get(`/trending/tv/${timeWindow}`, {
+        params: { page }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取${timeWindow === 'day' ? '日' : '周'}趋势剧集失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取剧集的预告片和相关视频
+   * @param tvId 剧集ID
+   * @returns 视频列表
+   */
+  async getTvShowVideos(tvId: number) {
+    try {
+      const response = await this.client.get(`/tv/${tvId}/videos`);
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取剧集ID ${tvId} 的预告片和视频失败: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }

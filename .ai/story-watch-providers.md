@@ -8,7 +8,7 @@
 
 ## Status
 
-Draft
+已完成 (Completed)
 
 ## Context
 
@@ -22,17 +22,17 @@ Story Points: 1
 
 ## Tasks
 
-1.  - [ ] 定义新的MCP工具 `get_watch_providers`
-    1.  - [ ] 设计工具输入参数: `{ "show_title": string, "country_code"?: string }` (剧集名称，可选的国家/地区代码 - 默认为 'US')
-    2.  - [ ] 设计工具输出格式 (包含国家/地区、TMDB链接、以及流媒体/租赁/购买的平台列表)
-2.  - [ ] 实现TMDB API调用逻辑
-    1.  - [ ] 添加函数：根据剧集名称搜索获取剧集ID (`search/tv`)
-    2.  - [ ] 添加函数：调用 `/tv/{series_id}/watch/providers` API
-    3.  - [ ] 组合上述函数，处理国家/地区代码和API错误
-3.  - [ ] 编写单元测试
-    1.  - [ ] 测试剧集ID查找
-    2.  - [ ] 测试观看渠道API调用 (不同国家/地区)
-    3.  - [ ] 测试错误处理 (剧集未找到、无观看渠道等)
+1.  - [x] 定义新的MCP工具 `get_watch_providers`
+    1.  - [x] 设计工具输入参数: `{ "show_title": string, "country_code"?: string }` (剧集名称，可选的国家/地区代码 - 默认为 'US')
+    2.  - [x] 设计工具输出格式 (包含国家/地区、TMDB链接、以及流媒体/租赁/购买的平台列表)
+2.  - [x] 实现TMDB API调用逻辑
+    1.  - [x] 添加函数：根据剧集名称搜索获取剧集ID (`search/tv`)
+    2.  - [x] 添加函数：调用 `/tv/{series_id}/watch/providers` API
+    3.  - [x] 组合上述函数，处理国家/地区代码和API错误
+3.  - [x] 编写单元测试
+    1.  - [x] 测试剧集ID查找
+    2.  - [x] 测试观看渠道API调用 (不同国家/地区)
+    3.  - [x] 测试错误处理 (剧集未找到、无观看渠道等)
 
 ## Constraints
 
@@ -68,8 +68,8 @@ Story Points: 1
 
 ## Structure
 
-- 新增工具实现文件: `src/tools/watchProvidersTool.ts`
-- 可能需要更新服务层: `src/services/tmdbService.ts` (添加新的API调用方法)
+- 新增工具实现文件: `src/tools/watchProviders.ts`
+- 可能需要更新服务层: `src/services/tmdbClient.ts` (添加新的API调用方法)
 - 更新服务器入口: `src/server.ts` (注册新工具)
 
 ## Diagrams
@@ -83,4 +83,4 @@ Story Points: 1
 
 ## Chat Command Log
 
-- (待填充) 
+- 功能已完成实现并集成到系统中，可以通过 `get_watch_providers` 工具查询剧集的观看渠道信息。 

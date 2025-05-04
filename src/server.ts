@@ -14,7 +14,12 @@ import {
   getWatchProviders,
   type GetWatchProvidersParams,
   discoverShows,
-  type DiscoverShowsParams
+  type DiscoverShowsParams,
+  getActorDetailsAndCredits,
+  getShowReviews,
+  getPopularShows,
+  getTrendingShows,
+  getShowVideos
 } from './tools';
 
 // 加载环境变量
@@ -130,6 +135,80 @@ server.tool("get_recommendations_by_actor",
     console.log(`收到获取演员推荐请求，演员名称: ${params.actor_name}，限制: ${params.limit || 10}`);
     const { getRecommendationsByActor } = require('./tools/discoverShowsTool');
     const results = await getRecommendationsByActor(params.actor_name, params.limit);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册获取演员信息和作品的工具
+server.tool("get_actor_details_and_credits",
+  { 
+    actor_name: z.string().describe('演员名称，如"布莱恩·科兰斯顿"、"安东尼·斯塔尔"等')
+  },
+  async (params) => {
+    console.log(`收到获取演员信息和作品请求，演员名称: ${params.actor_name}`);
+    const results = await getActorDetailsAndCredits(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册评论查询工具
+server.tool("get_show_reviews",
+  { 
+    show_title: z.string().describe('剧集名称，用于获取评论'),
+    page: z.number().optional().default(1).describe('页码，默认为1')
+  },
+  async (params) => {
+    console.log(`收到获取剧集评论请求，剧集名称: ${params.show_title}，页码: ${params.page || 1}`);
+    const results = await getShowReviews({
+      show_title: params.show_title,
+      page: params.page
+    });
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册热门与趋势剧集查询工具
+server.tool("get_popular_shows",
+  { 
+    page: z.number().optional().default(1).describe('页码，默认为1')
+  },
+  async (params) => {
+    console.log(`收到获取热门剧集请求，页码: ${params.page || 1}`);
+    const results = await getPopularShows(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+server.tool("get_trending_shows",
+  { 
+    time_window: z.enum(['day', 'week']).default('week').describe('时间窗口，day表示日趋势，week表示周趋势，默认为week'),
+    page: z.number().optional().default(1).describe('页码，默认为1')
+  },
+  async (params) => {
+    console.log(`收到获取${params.time_window === 'day' ? '日' : '周'}趋势剧集请求，页码: ${params.page || 1}`);
+    const results = await getTrendingShows(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册视频查询工具
+server.tool("get_show_videos",
+  { 
+    show_title: z.string().describe('剧集名称，用于获取预告片和视频')
+  },
+  async (params) => {
+    console.log(`收到获取剧集视频请求，剧集名称: ${params.show_title}`);
+    const results = await getShowVideos(params);
     return {
       content: [{ type: "text", text: JSON.stringify(results) }]
     };

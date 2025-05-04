@@ -268,4 +268,468 @@ describe('TMDbClient Implementation Tests', () => {
       await expect(client.getSimilarTvShows(66732)).rejects.toThrow('API Error');
     });
   });
+
+  describe('getTvShowWatchProviders', () => {
+    it('应该返回指定地区的观看渠道信息', async () => {
+      const mockData = {
+        id: 66732,
+        results: {
+          US: {
+            link: 'https://example.com/watch',
+            flatrate: [{ provider_id: 8, provider_name: 'Netflix' }]
+          },
+          CN: {
+            link: 'https://example.cn/watch',
+            flatrate: [{ provider_id: 10, provider_name: 'iQiyi' }]
+          }
+        }
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      // 默认使用US
+      const result = await client.getTvShowWatchProviders(66732);
+
+      expect(result).toEqual({
+        id: 66732,
+        results: {
+          link: 'https://example.com/watch',
+          flatrate: [{ provider_id: 8, provider_name: 'Netflix' }]
+        }
+      });
+      expect(axiosInstance.get).toHaveBeenCalledWith('/tv/66732/watch/providers');
+    });
+
+    it('应该支持自定义国家代码', async () => {
+      const mockData = {
+        id: 66732,
+        results: {
+          US: {
+            link: 'https://example.com/watch',
+            flatrate: [{ provider_id: 8, provider_name: 'Netflix' }]
+          },
+          CN: {
+            link: 'https://example.cn/watch',
+            flatrate: [{ provider_id: 10, provider_name: 'iQiyi' }]
+          }
+        }
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      // 使用CN
+      const result = await client.getTvShowWatchProviders(66732, 'CN');
+
+      expect(result).toEqual({
+        id: 66732,
+        results: {
+          link: 'https://example.cn/watch',
+          flatrate: [{ provider_id: 10, provider_name: 'iQiyi' }]
+        }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getTvShowWatchProviders(66732)).rejects.toThrow('API Error');
+    });
+
+    it('当指定地区不存在数据时应返回空对象', async () => {
+      const mockData = {
+        id: 66732,
+        results: {
+          US: {
+            link: 'https://example.com/watch',
+            flatrate: [{ provider_id: 8, provider_name: 'Netflix' }]
+          }
+        }
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      // 使用不存在的地区代码
+      const result = await client.getTvShowWatchProviders(66732, 'FR');
+
+      expect(result).toEqual({
+        id: 66732,
+        results: {}
+      });
+    });
+  });
+
+  describe('discoverTvShows', () => {
+    it('应该使用提供的参数调用API', async () => {
+      const mockData = {
+        page: 1,
+        results: [{ id: 1, name: '发现剧集' }],
+        total_pages: 10,
+        total_results: 100
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const params = {
+        with_genres: 28,
+        sort_by: 'popularity.desc',
+        'vote_average.gte': 7.5
+      };
+      
+      const result = await client.discoverTvShows(params);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/discover/tv', {
+        params: {
+          ...params,
+          page: 1
+        }
+      });
+    });
+
+    it('应该使用默认页码1', async () => {
+      const mockData = {
+        page: 1,
+        results: [{ id: 1, name: '发现剧集' }]
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      await client.discoverTvShows({});
+
+      expect(axiosInstance.get).toHaveBeenCalledWith('/discover/tv', {
+        params: { page: 1 }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.discoverTvShows()).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('searchPerson', () => {
+    it('应该使用正确的参数调用API', async () => {
+      const mockData = {
+        results: [{ id: 123, name: '汤姆·汉克斯' }]
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.searchPerson('汤姆');
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/search/person', {
+        params: { query: '汤姆' }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.searchPerson('汤姆')).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('searchKeyword', () => {
+    it('应该使用正确的参数调用API', async () => {
+      const mockData = {
+        results: [{ id: 123, name: '超级英雄' }]
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.searchKeyword('英雄');
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/search/keyword', {
+        params: { query: '英雄' }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.searchKeyword('英雄')).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getPersonDetails', () => {
+    it('应该使用正确的URL调用API', async () => {
+      const mockData = {
+        id: 123,
+        name: '汤姆·汉克斯',
+        biography: '著名演员...',
+        birthday: '1956-07-09'
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getPersonDetails(123);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/person/123');
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getPersonDetails(123)).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getNetworks', () => {
+    it('应该使用正确的URL调用API', async () => {
+      const mockData = {
+        results: [
+          { provider_id: 8, provider_name: 'Netflix' },
+          { provider_id: 9, provider_name: 'HBO' }
+        ]
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getNetworks();
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/watch/providers/tv');
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getNetworks()).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getPersonTvCredits', () => {
+    it('应该使用正确的URL调用API', async () => {
+      const mockData = {
+        id: 123,
+        cast: [
+          { id: 1, name: '剧集1', character: '角色1' },
+          { id: 2, name: '剧集2', character: '角色2' }
+        ],
+        crew: [
+          { id: 3, name: '剧集3', job: '导演' }
+        ]
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getPersonTvCredits(123);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/person/123/tv_credits');
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getPersonTvCredits(123)).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getTvShowReviews', () => {
+    it('应该使用正确的URL和默认页码调用API', async () => {
+      const mockData = {
+        id: 123,
+        page: 1,
+        results: [
+          { id: 'abc123', author: '用户1', content: '很棒的剧集!' },
+          { id: 'def456', author: '用户2', content: '值得推荐.' }
+        ],
+        total_pages: 1,
+        total_results: 2
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getTvShowReviews(123);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/tv/123/reviews', {
+        params: { page: 1 }
+      });
+    });
+
+    it('应该支持自定义页码', async () => {
+      const mockData = {
+        id: 123,
+        page: 2,
+        results: [
+          { id: 'ghi789', author: '用户3', content: '很精彩!' }
+        ],
+        total_pages: 2,
+        total_results: 3
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getTvShowReviews(123, 2);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/tv/123/reviews', {
+        params: { page: 2 }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getTvShowReviews(123)).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getPopularTvShows', () => {
+    it('应该使用正确的URL和默认页码调用API', async () => {
+      const mockData = {
+        page: 1,
+        results: [
+          { id: 1, name: '热门剧集1' },
+          { id: 2, name: '热门剧集2' }
+        ],
+        total_pages: 10,
+        total_results: 200
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getPopularTvShows();
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/tv/popular', {
+        params: { page: 1 }
+      });
+    });
+
+    it('应该支持自定义页码', async () => {
+      const mockData = {
+        page: 2,
+        results: [
+          { id: 3, name: '热门剧集3' },
+          { id: 4, name: '热门剧集4' }
+        ],
+        total_pages: 10,
+        total_results: 200
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getPopularTvShows(2);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/tv/popular', {
+        params: { page: 2 }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getPopularTvShows()).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getTrendingTvShows', () => {
+    it('应该默认使用week时间窗口', async () => {
+      const mockData = {
+        page: 1,
+        results: [
+          { id: 1, name: '周趋势剧集1' },
+          { id: 2, name: '周趋势剧集2' }
+        ],
+        total_pages: 5,
+        total_results: 100
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getTrendingTvShows();
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/trending/tv/week', {
+        params: { page: 1 }
+      });
+    });
+
+    it('应该支持day时间窗口', async () => {
+      const mockData = {
+        page: 1,
+        results: [
+          { id: 3, name: '日趋势剧集1' },
+          { id: 4, name: '日趋势剧集2' }
+        ],
+        total_pages: 3,
+        total_results: 50
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getTrendingTvShows('day');
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/trending/tv/day', {
+        params: { page: 1 }
+      });
+    });
+
+    it('应该支持自定义页码', async () => {
+      const mockData = {
+        page: 2,
+        results: [
+          { id: 5, name: '周趋势剧集3' },
+          { id: 6, name: '周趋势剧集4' }
+        ],
+        total_pages: 5,
+        total_results: 100
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getTrendingTvShows('week', 2);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/trending/tv/week', {
+        params: { page: 2 }
+      });
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getTrendingTvShows()).rejects.toThrow('API Error');
+    });
+  });
+
+  describe('getTvShowVideos', () => {
+    it('应该使用正确的URL调用API', async () => {
+      const mockData = {
+        id: 123,
+        results: [
+          { 
+            id: 'v1', 
+            key: 'abc123', 
+            name: '预告片', 
+            site: 'YouTube',
+            type: 'Trailer',
+            official: true
+          }
+        ]
+      };
+      
+      axiosInstance.get.mockResolvedValueOnce({ data: mockData });
+
+      const result = await client.getTvShowVideos(123);
+
+      expect(result).toEqual(mockData);
+      expect(axiosInstance.get).toHaveBeenCalledWith('/tv/123/videos');
+    });
+
+    it('当API调用失败时应该抛出错误', async () => {
+      axiosInstance.get.mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(client.getTvShowVideos(123)).rejects.toThrow('API Error');
+    });
+  });
 }); 

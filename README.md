@@ -4,7 +4,7 @@
 
 ## 项目描述
 
-本项目是一个基于MCP(Model Context Protocol)的服务器，专门用于提供美剧推荐服务。服务器通过标准输入/输出(stdio)与支持MCP的客户端通信，并通过调用TMDb(The Movie Database) API获取数据。
+本项目是一个基于MCP(Model Context Protocol)的服务器，专门用于提供全面的美剧推荐和信息查询服务。服务器通过标准输入/输出(stdio)与支持MCP的客户端通信，并通过调用TMDb(The Movie Database) API获取数据。服务覆盖从剧集发现、详情查询到观看渠道、演员信息、用户评论等多方面功能，为用户提供一站式剧集探索体验。
 
 ## 功能特点
 
@@ -12,6 +12,12 @@
 - 提供按类型推荐剧集功能
 - 提供相似剧集推荐功能
 - 提供剧集详情查询功能
+- 查询剧集观看渠道（流媒体、租赁、购买平台）
+- 支持多条件组合的高级剧集发现
+- 查询演员信息及其参演作品
+- 获取当前热门和趋势剧集
+- 获取剧集预告片和相关视频
+- 查看用户对剧集的评论
 - 使用TMDb API获取最新、最全面的剧集数据
 
 ## 技术栈
@@ -123,6 +129,31 @@ npx tv-recommender-mcp-server
    - 在Cursor的开发者工具中（按 `Cmd+Option+I` 打开）查看控制台输出
    - 通过环境变量启用调试模式：`"DEBUG=mcp:*,npx tv-recommender-mcp-server"`
 
+## 使用场景示例
+
+以下是几个实际使用场景示例，展示如何结合多个工具获得更好的体验：
+
+1. **发现新剧集**：
+   - 使用 `get_popular_shows` 或 `get_trending_shows` 获取当前热门剧集
+   - 找到感兴趣的剧集后，用 `get_show_details` 查看详情
+   - 通过 `get_show_videos` 观看预告片
+   - 使用 `get_watch_providers` 查找哪里可以观看
+
+2. **基于喜爱的演员探索**：
+   - 通过 `get_actor_details_and_credits` 查看喜欢的演员的所有作品
+   - 使用 `get_recommendations_by_actor` 获取与该演员相关的推荐
+   - 对感兴趣的剧集，用 `get_show_reviews` 查看其他观众的评价
+
+3. **精确筛选剧集**：
+   - 使用 `discover_shows` 结合多种条件（类型、年代、评分、关键词等）精确查找符合个人口味的剧集
+   - 例如：查找2020年后的高分科幻剧集，或者查找特定电视网络（如HBO、Netflix）的原创剧集
+
+4. **相似内容探索**：
+   - 看完一部喜欢的剧集后，使用 `get_similar_shows` 寻找风格相似的其他剧集
+   - 结合 `get_recommendations_by_genre` 探索更多同类型优质内容
+
+以上功能可以在AI聊天中自然地组合使用，例如可以对AI说"推荐一些类似《怪奇物语》的科幻剧，并告诉我在哪里可以观看"，MCP工具会自动配合AI提供所需信息。
+
 ## 工具说明
 
 本MCP服务器提供以下工具:
@@ -130,6 +161,50 @@ npx tv-recommender-mcp-server
 1. **get_recommendations_by_genre** - 按类型获取剧集推荐
 2. **get_similar_shows** - 获取与指定剧集相似的推荐
 3. **get_show_details** - 获取指定剧集的详细信息
+4. **get_watch_providers** - 查询特定剧集在指定国家/地区的观看渠道（流媒体、租赁、购买）
+5. **discover_shows** - 高级剧集发现，支持多种条件组合（如类型、评分、年份、关键词、播放平台等）
+6. **find_shows_by_actor** - 查找演员参演的剧集
+7. **get_recommendations_by_actor** - 获取演员推荐的剧集
+8. **get_actor_details_and_credits** - 获取演员详细信息（如简介、照片）及其参演的剧集列表
+9. **get_popular_shows** - 获取当前最热门的剧集
+10. **get_trending_shows** - 获取近期趋势剧集（支持日趋势和周趋势）
+11. **get_show_videos** - 获取指定剧集的预告片和相关视频
+12. **get_show_reviews** - 查看其他用户对特定剧集的评论
+
+## 功能示例
+
+以下是各工具的使用示例:
+
+### 获取观看渠道
+```
+/TVRecommender get_watch_providers --show_title="怪奇物语" --country_code="US"
+```
+
+### 高级剧集发现
+```
+/TVRecommender discover_shows --with_genres=["科幻", "惊悚"] --vote_average_gte=8.0 --first_air_date_year=2022
+```
+
+### 查询演员信息及作品
+```
+/TVRecommender get_actor_details_and_credits --actor_name="布莱恩·科兰斯顿"
+```
+
+### 获取热门与趋势剧集
+```
+/TVRecommender get_popular_shows
+/TVRecommender get_trending_shows --time_window="day"
+```
+
+### 获取剧集预告片与视频
+```
+/TVRecommender get_show_videos --show_title="权力的游戏"
+```
+
+### 查询剧集用户评论
+```
+/TVRecommender get_show_reviews --show_title="绝命毒师" --page=1
+```
 
 ## 开发模式
 

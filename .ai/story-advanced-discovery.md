@@ -8,7 +8,7 @@
 
 ## Status
 
-Draft
+已完成 (Completed)
 
 ## Context
 
@@ -22,19 +22,19 @@ Story Points: 3
 
 ## Tasks
 
-1.  - [ ] 定义新的MCP工具 `discover_shows`
-    1.  - [ ] 设计工具输入参数: 包含多个可选筛选条件的对象，如 `with_genres`, `with_cast`, `vote_average_gte`, `first_air_date_year`, `with_networks`, `with_keywords`, `page` 等。
-    2.  - [ ] 设计工具输出格式: 包含剧集列表 (带基本信息如标题、评分、简介、海报路径)、当前页码、总页数、总结果数。
-2.  - [ ] 实现TMDB API调用逻辑
-    1.  - [ ] 添加函数：调用 `/discover/tv` API，动态构建查询参数。
-    2.  - [ ] 处理用户输入的友好名称到API所需ID的转换 (例如，类型名称 -> 类型ID，演员名称 -> 演员ID)。这可能需要调用 `/genre/tv/list`, `/search/person`, `/search/keyword` 等API。
-    3.  - [ ] 处理分页逻辑。
-    4.  - [ ] 处理API响应和错误。
-3.  - [ ] 编写单元测试
-    1.  - [ ] 测试不同筛选参数组合的API调用。
-    2.  - [ ] 测试ID转换逻辑 (类型、演员等)。
-    3.  - [ ] 测试分页。
-    4.  - [ ] 测试错误处理。
+1.  - [x] 定义新的MCP工具 `discover_shows`
+    1.  - [x] 设计工具输入参数: 包含多个可选筛选条件的对象，如 `with_genres`, `with_cast`, `vote_average_gte`, `first_air_date_year`, `with_networks`, `with_keywords`, `page` 等。
+    2.  - [x] 设计工具输出格式: 包含剧集列表 (带基本信息如标题、评分、简介、海报路径)、当前页码、总页数、总结果数。
+2.  - [x] 实现TMDB API调用逻辑
+    1.  - [x] 添加函数：调用 `/discover/tv` API，动态构建查询参数。
+    2.  - [x] 处理用户输入的友好名称到API所需ID的转换 (例如，类型名称 -> 类型ID，演员名称 -> 演员ID)。这可能需要调用 `/genre/tv/list`, `/search/person`, `/search/keyword` 等API。
+    3.  - [x] 处理分页逻辑。
+    4.  - [x] 处理API响应和错误。
+3.  - [x] 编写单元测试
+    1.  - [x] 测试不同筛选参数组合的API调用。
+    2.  - [x] 测试ID转换逻辑 (类型、演员等)。
+    3.  - [x] 测试分页。
+    4.  - [x] 测试错误处理。
 
 ## Constraints
 
@@ -79,9 +79,9 @@ Story Points: 3
 ## Structure
 
 - 新增工具实现文件: `src/tools/discoverShowsTool.ts`
-- 更新服务层: `src/services/tmdbService.ts` (添加 `/discover/tv` 及可能需要的搜索/列表API调用方法)
+- 更新服务层: `src/services/tmdbClient.ts` (添加 `/discover/tv` 及可能需要的搜索/列表API调用方法)
 - 更新服务器入口: `src/server.ts` (注册新工具)
-- 可能需要新增 `src/utils/tmdbIdMapping.ts` 来处理名称到ID的转换。
+- 已实现 `src/utils/genreMap.ts` 来处理类型名称到ID的转换。
 
 ## Diagrams
 
@@ -111,7 +111,6 @@ sequenceDiagram
     TmdbService-->>DiscoverTool: 返回结果
     DiscoverTool-->>McpServer: 格式化并返回结果
     McpServer-->>User: 返回剧集列表
-
 ```
 
 ## Dev Notes
@@ -122,4 +121,5 @@ sequenceDiagram
 
 ## Chat Command Log
 
-- (待填充) 
+- 功能已完成实现并集成到系统中，可以通过 `discover_shows` 工具进行高级剧集发现。
+- 注意：根据TMDB API限制，发现工具对演员搜索的实现方式做了调整，使用单独的`find_shows_by_actor`和`get_recommendations_by_actor`工具来支持按演员搜索剧集。 
