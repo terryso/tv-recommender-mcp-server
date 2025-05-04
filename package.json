@@ -1,8 +1,11 @@
 {
   "name": "tv-recommender-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "MCP server for TV show recommendations",
   "main": "dist/server.js",
+  "bin": {
+    "tv-recommender-mcp-server": "./bin/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
@@ -12,7 +15,8 @@
     "test-similar": "ts-node src/utils/testSimilarShowsTool.ts",
     "test-details": "ts-node src/utils/testShowDetailsTool.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepare": "npm run build"
   },
   "keywords": [
     "mcp",
@@ -48,5 +52,12 @@
       "**/__tests__/**/*.ts",
       "**/?(*.)+(spec|test).ts"
     ]
-  }
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ]
 }

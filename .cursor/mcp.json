@@ -13,8 +13,9 @@
       "command": "env",
       "args": [
         "TMDB_API_KEY=4a025031ff1c0d928edb9d67353214e1",
-        "node",
-        "/Users/nick/CascadeProjects/tv-recommender-mcp-server/dist/server.js"
+        "npx",
+        "-y",
+        "tv-recommender-mcp-server"
       ]
     }
   }
