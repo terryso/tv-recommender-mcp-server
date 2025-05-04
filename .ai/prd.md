@@ -47,14 +47,17 @@
 (包含 MVP 范围内的所有核心功能和故事)
 
 ### Epic-2: 增强与扩展 (Future Enhancement)
-(包含获取热门剧集、查询观看平台、支持电影等)
+(包含获取热门剧集、查询观看平台、支持电影、关键词发现、演员早期作品、剧集详情、提供商聚合等)
 
 ### Epic-3: 个性化与集成 (Future Enhancement)
-(包含连接 Trakt.tv 等用户个性化功能)
+(包含连接 Trakt.tv、智能追剧进度管理等用户个性化功能)
+
+### Epic-4: 可视化与探索 (Future Enhancement)
+(包含系列/宇宙可视化等)
 
 ## Epic 1: Story List (核心推荐工具 MVP)
 
-- **Story 1.1: MCP Server 基础设置与 API 集成**
+- **Story 1.1: MCP Server 基础设置与 API 集成** (`story-1-1-setup-integration.md`)
   Status: ''
   Requirements:
     - 初始化 TypeScript 项目 (使用 Node.js)。
@@ -65,7 +68,7 @@
     - 建立基础的错误处理和日志框架。
     - **处理剧集查找结果 (如果重名则默认选择第一个结果；如果找不到则返回明确的错误文本)。**
 
-- **Story 1.2: 实现 `get_recommendations_by_genre` 工具**
+- **Story 1.2: 实现 `get_recommendations_by_genre` 工具** (`story-1-2-recommend-genre.md`)
   Status: ''
   Requirements:
     - 在 MCP Server 中定义 `get_recommendations_by_genre` 工具接口。
@@ -75,7 +78,7 @@
     - 处理 API 结果，筛选并格式化推荐列表。**(返回格式应包含：年份、评分、简介)**
     - **实现无法识别类型或无结果时的响应逻辑 (返回明确的错误文本)。**
 
-- **Story 1.3: 实现 `get_similar_shows` 工具**
+- **Story 1.3: 实现 `get_similar_shows` 工具** (`story-1-3-recommend-similar.md`)
   Status: ''
   Requirements:
     - 在 MCP Server 中定义 `get_similar_shows` 工具接口。
@@ -86,7 +89,7 @@
     - **定义推荐数量 (默认 10 部)。**
     - 处理并格式化相似剧集列表。**(返回格式应包含：年份、评分、简介)**
 
-- **Story 1.4: 实现 `get_show_details` 工具**
+- **Story 1.4: 实现 `get_show_details` 工具** (`story-1-4-show-details.md`)
   Status: ''
   Requirements:
     - 在 MCP Server 中定义 `get_show_details` 工具接口。
@@ -95,6 +98,60 @@
     - **处理剧集查找结果 (如果重名则进行去重处理；如果找不到则返回明确的错误文本)。**
     - **定义返回的详细信息字段 (剧名、年份、评分、类型、简介、演员、季数、状态)。**
     - **格式化并返回结构化的剧集详情。**
+
+## Epic 2: Story List (增强与扩展)
+
+- **Story 2.1: Keyword/Theme Based Discovery** (`story-2-1-keyword-discovery.md`)
+  Status: Draft
+  Requirements: 按关键词或主题发现影视剧。
+
+- **Story 2.2: Early Actor Works Discovery** (`story-2-2-early-works.md`)
+  Status: Draft
+  Requirements: 查看演员早期作品并按时间排序。
+
+- **Story 2.3: Detailed Episode Information and Interaction** (`story-2-3-episode-details.md`)
+  Status: Draft
+  Requirements: 查看单集详情（客串、评分、剧照）并支持单集评分。
+
+- **Story 2.4: Provider/Network/Company Content Aggregation** (`story-2-4-provider-aggregation.md`)
+  Status: Draft
+  Requirements: 按平台/网络/公司聚合浏览内容。
+
+- **Story 2.5: 查询演员信息及其作品** (`story-2-5-actor-info.md`)
+  Status: 已完成 (Completed)
+  Requirements: 查询演员详细信息和参演剧集列表。
+
+- **Story 2.6: 实现高级剧集发现功能** (`story-2-6-advanced-discovery.md`)
+  Status: 已完成 (Completed)
+  Requirements: 使用多种条件组合搜索剧集。
+
+- **Story 2.7: 查询热门与趋势剧集** (`story-2-7-popular-trending.md`)
+  Status: 已完成 (Completed)
+  Requirements: 查看当前热门和近期趋势剧集。
+
+- **Story 2.8: 查询剧集用户评论** (`story-2-8-reviews-ratings.md`)
+  Status: 已完成 (Completed)
+  Requirements: 查看其他用户对剧集的评论。
+
+- **Story 2.9: 查询剧集预告片与视频** (`story-2-9-trailers.md`)
+  Status: 已完成 (Completed)
+  Requirements: 获取剧集预告片和其他视频链接。
+
+- **Story 2.10: 查询剧集观看渠道** (`story-2-10-watch-providers.md`)
+  Status: 已完成 (Completed)
+  Requirements: 查询剧集在特定地区的观看渠道。
+
+## Epic 3: Story List (个性化与集成)
+
+- **Story 3.1: Smart Watch Progress Management** (`story-3-1-watch-progress.md`)
+  Status: Draft
+  Requirements: 标记已看剧集并提示下一集未看。
+
+## Epic 4: Story List (可视化与探索)
+
+- **Story 4.1: Visual Franchise/Universe Exploration** (`story-4-1-franchise-visualization.md`)
+  Status: Draft
+  Requirements: 可视化展示系列电影/宇宙的时间线或关系图。
 
 ## Technology Stack
 

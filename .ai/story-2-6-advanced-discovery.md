@@ -1,4 +1,4 @@
-# Epic-1 - Story-2
+# Epic-2 - Story-2.6
 
 实现高级剧集发现功能 (Implement Advanced Show Discovery)
 

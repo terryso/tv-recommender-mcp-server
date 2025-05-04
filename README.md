@@ -1,3 +1,5 @@
+[English Version](README.en.md)
+
 # TV推荐MCP服务器
 
 基于TMDb API的美剧推荐MCP服务器，提供按类型推荐、相似剧集推荐和剧集详情功能。
@@ -233,3 +235,31 @@ npm run dev
 ## 许可证
 
 [MIT](LICENSE) © 2023-present 
+
+## Roadmap
+
+以下是项目的完整路线图 (基于 `.ai` 目录下的用户故事):
+
+**Epic 1: 核心推荐工具 MVP**
+- [x] Story 1.1: MCP Server 基础设置与 API 集成 (`story-1-1-setup-integration.md`)
+- [x] Story 1.2: 实现 `get_recommendations_by_genre` 工具 (`story-1-2-recommend-genre.md`)
+- [x] Story 1.3: 实现 `get_similar_shows` 工具 (`story-1-3-recommend-similar.md`)
+- [x] Story 1.4: 实现 `get_show_details` 工具 (`story-1-4-show-details.md`)
+
+**Epic 2: 增强与扩展**
+- [ ] Story 2.1: Keyword/Theme Based Discovery (`story-2-1-keyword-discovery.md`)
+- [ ] Story 2.2: Early Actor Works Discovery (`story-2-2-early-works.md`)
+- [ ] Story 2.3: Detailed Episode Information and Interaction (`story-2-3-episode-details.md`)
+- [ ] Story 2.4: Provider/Network/Company Content Aggregation (`story-2-4-provider-aggregation.md`)
+- [x] Story 2.5: 查询演员信息及其作品 (`story-2-5-actor-info.md`)
+- [x] Story 2.6: 实现高级剧集发现功能 (`story-2-6-advanced-discovery.md`)
+- [x] Story 2.7: 查询热门与趋势剧集 (`story-2-7-popular-trending.md`)
+- [x] Story 2.8: 查询剧集用户评论 (`story-2-8-reviews-ratings.md`)
+- [x] Story 2.9: 查询剧集预告片与视频 (`story-2-9-trailers.md`)
+- [x] Story 2.10: 查询剧集观看渠道 (`story-2-10-watch-providers.md`)
+
+**Epic 3: 个性化与集成**
+- [ ] Story 3.1: Smart Watch Progress Management (`story-3-1-watch-progress.md`)
+
+**Epic 4: 可视化与探索**
+- [ ] Story 4.1: Visual Franchise/Universe Exploration (`story-4-1-franchise-visualization.md`) 
