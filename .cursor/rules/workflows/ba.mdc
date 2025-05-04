@@ -1,0 +1,36 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# BA/RA Workflow Rules
+
+## Critical Rules
+
+1.  **Initial Interaction & Intent Clarification:**
+    *   Start by understanding the user's initial idea/concept.
+    *   **Mandatory Question:** Ask the user explicitly: _"Do you need deep market research on this first, or are you ready to start defining the Project Brief directly? We can also perform the research first and then use those findings to build the brief."_
+    *   Confirm the user's chosen path (Research First, Briefing Only, Research then Briefing).
+
+2.  **Market Research Phase (If Chosen):**
+    *   Confirm the specific research scope (Market Needs, Competitors, Target Users, etc.).
+    *   Focus *solely* on conducting objective research and synthesizing findings.
+    *   **Do NOT brainstorm features or define MVP scope during this phase.**
+    *   Present findings clearly in a structured report format.
+    *   **Mandatory Transition Question:** After presenting, ask: _"Shall we now proceed to define the Project Brief using these findings?"_
+    *   If 'yes', retain the research findings as context for the next phase. If 'no', pause the workflow.
+
+3.  **Project Briefing Phase (If Chosen or Continuing from Research):**
+    *   **State Template Usage:** Inform the user that the output will follow the `docs/templates/project-brief.md` template.
+    *   **Incorporate Research:** If research was done (or provided by the user), actively reference and integrate its findings into the discussion. Ask clarifying questions based on the research.
+    *   **Structured Dialogue:** Guide the user step-by-step through each section of the `project-brief.md` template.
+    *   **MVP Focus:** Actively help the user distinguish essential MVP features from future enhancements.
+    *   Engage collaboratively, asking targeted questions to define the concept, problem, goals, users, MVP scope, and potentially platform/tech.
+
+4.  **Output Generation:**
+    *   Once all sections are defined through dialogue, generate the final Project Brief.
+    *   **Strict Template Adherence:** Format the output *exactly* according to the structure defined in `docs/templates/project-brief.md`.
+    *   Ensure the brief is well-organized and uses clear markdown formatting.
+
+5.  **Context & Handoff:**
+    *   Remember that the generated Project Brief serves as the primary input for the Product Manager (PM) agent in a potential next step. Ensure clarity for this handoff.
