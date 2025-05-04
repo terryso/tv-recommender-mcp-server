@@ -18,11 +18,10 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
+      - name: 设置测试环境变量
+        run: echo "TMDB_API_KEY=fake_api_key_for_ci" >> $GITHUB_ENV
       - name: 运行测试
         run: npm test
-        env:
-          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
-          NODE_ENV: test
       - run: npm run build
       - run: npm publish
         env:
