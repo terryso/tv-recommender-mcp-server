@@ -10,7 +10,11 @@ import {
   getSimilarShows,
   type GetSimilarShowsParams,
   getShowDetails,
-  type GetShowDetailsParams
+  type GetShowDetailsParams,
+  getWatchProviders,
+  type GetWatchProvidersParams,
+  discoverShows,
+  type DiscoverShowsParams
 } from './tools';
 
 // 加载环境变量
@@ -59,6 +63,73 @@ server.tool("get_show_details",
   async (params) => {
     console.log(`收到获取剧集详情请求，剧集名称: ${params.show_title}`);
     const results = await getShowDetails(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册get_watch_providers工具
+server.tool("get_watch_providers",
+  { 
+    show_title: z.string().describe('剧集名称，如"怪奇物语"、"绝命毒师"等'),
+    country_code: z.string().optional().describe('可选的国家/地区代码，如"US"、"CN"等，默认为"US"')
+  },
+  async (params) => {
+    console.log(`收到获取观看渠道请求，剧集名称: ${params.show_title}，国家/地区: ${params.country_code || 'US'}`);
+    const results = await getWatchProviders(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册discover_shows工具
+server.tool("discover_shows",
+  {
+    with_genres: z.array(z.string()).optional().describe('类型数组，如["喜剧", "科幻"]'),
+    first_air_date_year: z.number().optional().describe('首播年份，如2022'),
+    vote_average_gte: z.number().optional().describe('最低评分，如8.0'),
+    with_networks: z.array(z.number()).optional().describe('电视网络ID数组，如[213]表示Netflix'),
+    with_keywords: z.array(z.string()).optional().describe('关键词数组，如["机器人", "太空"]'),
+    sort_by: z.string().optional().describe('排序方式，如"popularity.desc"'),
+    page: z.number().optional().describe('页码，默认为1'),
+    with_original_language: z.string().optional().describe('原始语言，如"en"表示英语')
+  },
+  async (params) => {
+    console.log('收到高级剧集发现请求，参数:', params);
+    const results = await discoverShows(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册获取演员作品的工具
+server.tool("find_shows_by_actor",
+  { 
+    actor_name: z.string().describe('演员名称，如"布莱恩·科兰斯顿"、"安东尼·斯塔尔"等')
+  },
+  async (params) => {
+    console.log(`收到获取演员作品请求，演员名称: ${params.actor_name}`);
+    const { findShowsByPersonName } = require('./tools/discoverShowsTool');
+    const results = await findShowsByPersonName(params.actor_name);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册演员推荐工具
+server.tool("get_recommendations_by_actor",
+  { 
+    actor_name: z.string().describe('演员名称，如"布莱恩·科兰斯顿"、"安东尼·斯塔尔"等'),
+    limit: z.number().optional().default(10).describe('返回结果数量限制，默认为10')
+  },
+  async (params) => {
+    console.log(`收到获取演员推荐请求，演员名称: ${params.actor_name}，限制: ${params.limit || 10}`);
+    const { getRecommendationsByActor } = require('./tools/discoverShowsTool');
+    const results = await getRecommendationsByActor(params.actor_name, params.limit);
     return {
       content: [{ type: "text", text: JSON.stringify(results) }]
     };

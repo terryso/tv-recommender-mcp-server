@@ -157,6 +157,109 @@ class TMDbClient {
       throw new Error(`获取剧集ID ${tvId} 的相似剧集失败: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
+
+  /**
+   * 获取剧集的观看渠道信息
+   * @param tvId 剧集ID
+   * @param countryCode 国家/地区代码，如"US"、"CN"等
+   * @returns 观看渠道信息
+   */
+  async getTvShowWatchProviders(tvId: number, countryCode = 'US') {
+    try {
+      const response = await this.client.get(`/tv/${tvId}/watch/providers`);
+      const results = response.data.results || {};
+      
+      // 返回指定国家/地区的观看渠道信息，如果没有则返回空对象
+      return {
+        id: tvId,
+        results: results[countryCode] || {}
+      };
+    } catch (error) {
+      // 记录错误并重新抛出
+      throw new Error(`获取剧集ID ${tvId} 的观看渠道失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 高级剧集发现API
+   * 支持多种筛选条件组合搜索
+   * @param params 搜索参数对象
+   * @returns 发现结果
+   */
+  async discoverTvShows(params: Record<string, string | number | boolean | string[] | number[]> = {}) {
+    try {
+      const response = await this.client.get('/discover/tv', {
+        params: {
+          ...params,
+          page: params.page || 1
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`高级剧集发现失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 搜索人物（演员、导演等）
+   * @param query 人物名称
+   * @returns 搜索结果
+   */
+  async searchPerson(query: string) {
+    try {
+      const response = await this.client.get('/search/person', {
+        params: { query }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`搜索人物"${query}"失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 搜索关键词
+   * @param query 关键词文本
+   * @returns 搜索结果
+   */
+  async searchKeyword(query: string) {
+    try {
+      const response = await this.client.get('/search/keyword', {
+        params: { query }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(`搜索关键词"${query}"失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取电视网络列表
+   * @returns 电视网络列表
+   */
+  async getNetworks() {
+    try {
+      // TMDb没有提供networks列表的API，但我们可以通过公司companies接口获取部分数据
+      // 这里简化处理，实际应用中可能需要维护一个常用networks的映射表
+      const response = await this.client.get('/watch/providers/tv');
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取电视网络列表失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * 获取人物的电视剧作品列表
+   * @param personId 人物ID
+   * @returns 人物参与的电视剧列表
+   */
+  async getPersonTvCredits(personId: number) {
+    try {
+      const response = await this.client.get(`/person/${personId}/tv_credits`);
+      return response.data;
+    } catch (error) {
+      throw new Error(`获取人物ID ${personId} 的电视剧作品失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
 }
 
 // 导出单例实例

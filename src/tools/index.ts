@@ -17,3 +17,21 @@ export {
   type GetShowDetailsParams,
   type ShowDetails
 } from './details'; 
+
+// 导出观看渠道查询工具
+export {
+  getWatchProviders,
+  type GetWatchProvidersParams,
+  type WatchProvidersResponse
+} from './watchProviders'; 
+
+// 导出高级发现工具
+export {
+  discoverShows,
+  type DiscoverShowsParams,
+  type DiscoverShowsResponse,
+  type DiscoverShowsResult,
+  findShowsByPersonName,
+  getRecommendationsByActor,
+  findPersonId
+} from './discoverShowsTool'; 

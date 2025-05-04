@@ -14,6 +14,7 @@
     "test-recommendations": "ts-node src/utils/testRecommendationsTool.ts",
     "test-similar": "ts-node src/utils/testSimilarShowsTool.ts",
     "test-details": "ts-node src/utils/testShowDetailsTool.ts",
+    "test-watch-providers": "ts-node src/utils/testWatchProvidersTool.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "npm run build"
