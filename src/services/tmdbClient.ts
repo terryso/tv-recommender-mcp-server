@@ -35,7 +35,7 @@ class TMDbClient {
       const response = await this.client.get('/configuration');
       return response.status === 200;
     } catch (error) {
-      console.error('TMDb API连接测试失败:', error);
+      // console.error('TMDb API连接测试失败:', error);
       return false;
     }
   }
@@ -48,7 +48,7 @@ class TMDbClient {
       const response = await this.client.get('/configuration');
       return response.data;
     } catch (error) {
-      console.error('获取TMDb配置失败:', error);
+      // console.error('获取TMDb配置失败:', error);
       throw error;
     }
   }
@@ -66,7 +66,7 @@ class TMDbClient {
       });
       return response.data;
     } catch (error) {
-      console.error(`查询TV节目"${query}"失败:`, error);
+      // console.error(`查询TV节目"${query}"失败:`, error);
       throw error;
     }
   }
@@ -93,7 +93,7 @@ class TMDbClient {
       
       return response.data;
     } catch (error) {
-      console.error(`获取类型ID ${genreId} 的推荐失败:`, error);
+      // console.error(`获取类型ID ${genreId} 的推荐失败:`, error);
       throw error;
     }
   }
@@ -107,7 +107,7 @@ class TMDbClient {
       const response = await this.client.get('/genre/tv/list');
       return response.data;
     } catch (error) {
-      console.error('获取TV类型列表失败:', error);
+      // console.error('获取TV类型列表失败:', error);
       throw error;
     }
   }
@@ -127,7 +127,7 @@ class TMDbClient {
       });
       return response.data;
     } catch (error) {
-      console.error(`搜索剧集"${title}"失败:`, error);
+      // console.error(`搜索剧集"${title}"失败:`, error);
       throw error;
     }
   }
@@ -147,7 +147,7 @@ class TMDbClient {
       
       return response.data;
     } catch (error) {
-      console.error(`获取剧集ID ${tvId} 的相似剧集失败:`, error);
+      // console.log(`获取剧集ID ${tvId} 的相似剧集失败:`, error);
       throw error;
     }
   }
