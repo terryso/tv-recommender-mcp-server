@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "TAV2": {
+      "command": "env",
+      "args": [
+        "TAVILY_API_KEY=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",
+        "npx",
+        "-y",
+        "tavily-mcp@0.1.3"
+      ]
+    },
+    "TVRecommender": {
+      "command": "env",
+      "args": [
+        "TMDB_API_KEY=4a025031ff1c0d928edb9d67353214e1",
+        "node",
+        "/Users/nick/CascadeProjects/tv-recommender-mcp-server/dist/server.js"
+      ]
+    }
+  }
+}

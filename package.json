@@ -1,0 +1,36 @@
+{
+  "name": "tv-recommender-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for TV show recommendations",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "test-api": "ts-node src/utils/testTMDbConnection.ts",
+    "test-recommendations": "ts-node src/utils/testRecommendationsTool.ts",
+    "test-similar": "ts-node src/utils/testSimilarShowsTool.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "tv-shows",
+    "recommendations",
+    "tmdb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "@types/node": "^20.12.2",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.4.2",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0"
+  }
+}
