@@ -1,0 +1,23 @@
+name: tv-recommender-mcp-server
+description: MCP server for TV show recommendations
+
+build:
+  type: docker
+  file: Dockerfile
+
+env:
+  - name: TMDB_API_KEY
+    description: TMDb API Key (required, get from https://www.themoviedb.org/)
+    required: true
+
+run:
+  command: node dist/server.js
+  cpu: 0.5
+  memory: 512Mi
+
+scale:
+  min: 1
+  max: 1
+
+docs:
+  readme: README.md 
