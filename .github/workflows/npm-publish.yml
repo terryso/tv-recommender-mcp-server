@@ -18,7 +18,11 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm test
+      - name: 运行测试
+        run: npm test
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          NODE_ENV: test
       - run: npm run build
       - run: npm publish
         env:
