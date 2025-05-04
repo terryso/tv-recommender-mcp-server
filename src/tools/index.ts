@@ -10,3 +10,10 @@ export {
   getSimilarShows,
   type GetSimilarShowsParams
 } from './recommendations'; 
+
+// 导出剧集详情工具
+export {
+  getShowDetails,
+  type GetShowDetailsParams,
+  type ShowDetails
+} from './details'; 

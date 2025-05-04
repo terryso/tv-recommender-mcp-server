@@ -133,7 +133,7 @@ export async function getRecommendationsByGenre(
     return formatRecommendationsToString(genreName, recommendations);
     
   } catch (error) {
-    console.error('获取推荐时发生错误:', error);
+    // console.error('获取推荐时发生错误:', error);
     return `获取推荐时发生错误: ${formatErrorMessage(error)}`;
   }
 }
@@ -180,7 +180,7 @@ export async function getSimilarShows(
     return formatSimilarShowsToString(showTitle, recommendations);
     
   } catch (error) {
-    console.error('获取相似剧集时发生错误:', error);
+    // console.error('获取相似剧集时发生错误:', error);
     return `获取相似剧集时发生错误: ${formatErrorMessage(error)}`;
   }
 } 
