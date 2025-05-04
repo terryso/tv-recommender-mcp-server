@@ -125,7 +125,6 @@ npm run dev
 1. 确保更新了`package.json`中的版本号
 2. 在GitHub仓库设置中添加以下密钥：
    - `NPM_TOKEN`: 您的NPM访问令牌
-   - `TMDB_API_KEY`: TMDb API密钥（用于运行测试）
 3. 在GitHub上创建一个新的Release或推送标签（v*格式）
 4. GitHub Actions会自动构建并发布到NPM
 
