@@ -8,7 +8,9 @@ import {
   getRecommendationsByGenre, 
   type GetRecommendationsByGenreParams,
   getSimilarShows,
-  type GetSimilarShowsParams
+  type GetSimilarShowsParams,
+  getShowDetails,
+  type GetShowDetailsParams
 } from './tools';
 
 // 加载环境变量
@@ -45,6 +47,18 @@ server.tool("get_similar_shows",
   async (params) => {
     console.log(`收到获取相似剧集请求，剧集名称: ${params.show_title}`);
     const results = await getSimilarShows(params);
+    return {
+      content: [{ type: "text", text: JSON.stringify(results) }]
+    };
+  }
+);
+
+// 注册get_show_details工具
+server.tool("get_show_details",
+  { show_title: z.string().describe('剧集名称，用于获取详细信息') },
+  async (params) => {
+    console.log(`收到获取剧集详情请求，剧集名称: ${params.show_title}`);
+    const results = await getShowDetails(params);
     return {
       content: [{ type: "text", text: JSON.stringify(results) }]
     };
