@@ -2,6 +2,7 @@
 
 # TV推荐MCP服务器 🚀
 
+[![smithery badge](https://smithery.ai/badge/tv-recommender-mcp-server)](https://smithery.ai/server/tv-recommender-mcp-server)
 [![npm version](https://badge.fury.io/js/tv-recommender-mcp-server.svg)](https://badge.fury.io/js/tv-recommender-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/node/v/tv-recommender-mcp-server)](https://nodejs.org)
