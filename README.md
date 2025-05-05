@@ -1,8 +1,13 @@
 [English Version](README.en.md)
 
-# TV推荐MCP服务器
+# TV推荐MCP服务器 🚀
 
-基于TMDb API的美剧推荐MCP服务器，提供按类型推荐、相似剧集推荐和剧集详情功能。
+[![npm version](https://badge.fury.io/js/tv-recommender-mcp-server.svg)](https://badge.fury.io/js/tv-recommender-mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/node/v/tv-recommender-mcp-server)](https://nodejs.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/terryso/tv-recommender-mcp-server/pulls)
+
+> 基于TMDb API的美剧推荐MCP服务器，提供按类型推荐、相似剧集推荐和剧集详情功能。
 
 ## 项目描述
 
