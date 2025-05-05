@@ -3,11 +3,12 @@
 
 # TV Recommender MCP Server 🚀
 
-[![smithery badge](https://smithery.ai/badge/tv-recommender-mcp-server)](https://smithery.ai/server/tv-recommender-mcp-server)
+[![codecov](https://codecov.io/github/terryso/tv-recommender-mcp-server/graph/badge.svg?token=ZMF2J8D636)](https://codecov.io/github/terryso/tv-recommender-mcp-server)
 [![npm version](https://badge.fury.io/js/tv-recommender-mcp-server.svg)](https://badge.fury.io/js/tv-recommender-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/node/v/tv-recommender-mcp-server)](https://nodejs.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/terryso/tv-recommender-mcp-server/pulls)
+[![smithery badge](https://smithery.ai/badge/tv-recommender-mcp-server)](https://smithery.ai/server/tv-recommender-mcp-server)
 
 > A TV show recommendation MCP server based on the TMDb API, providing recommendations by genre, similar shows, and show details.
 
