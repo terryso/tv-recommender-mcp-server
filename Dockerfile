@@ -15,4 +15,4 @@ COPY . .
 RUN npm run build
 
 # Command to run the MCP server via stdio
-CMD [ "node", "dist/server.js" ] 
+CMD [ "node", "bin/cli.js" ] 

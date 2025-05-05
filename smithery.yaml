@@ -8,7 +8,7 @@ startCommand:
     properties: {}
     default: {}
   commandFunction: 
-     # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
     |-
-    (config) => ({ command: 'node', args: ['dist/server.js'], env: process.env })
+    (config) => ({ command: 'node', args: ['bin/cli.js'], env: process.env })
   exampleConfig: {}
