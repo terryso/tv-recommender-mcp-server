@@ -107,6 +107,18 @@ npx tv-recommender-mcp-server
    npm start
    ```
 
+## 在Smithery平台中使用
+
+要在Smithery平台中使用此MCP服务器，请按照以下步骤操作：
+
+1. 访问 [Smithery平台](https://smithery.ai) 并登录您的账户
+2. 搜索"@terryso/tv-recommender-mcp-server"或直接访问 [tv-recommender-mcp-server](https://smithery.ai/server/@terryso/tv-recommender-mcp-server)
+3. 点击"Install"按钮安装此服务
+4. **重要**: 在配置过程中，您需要提供一个TMDb API密钥
+   - 您可以在 [TMDb](https://www.themoviedb.org/) 网站注册并申请免费API密钥
+   - 在输入框中填入您的API密钥
+5. 完成安装后，您可以在任何支持Smithery工具的AI聊天中使用此服务
+
 ## 在Cursor中配置MCP服务器
 
 要在Cursor中使用此MCP服务器，请按照以下步骤操作：

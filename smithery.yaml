@@ -5,10 +5,22 @@ startCommand:
   configSchema:
     # JSON Schema defining the configuration options for the MCP
     type: object
-    properties: {}
+    properties:
+      TMDB_API_KEY:
+        type: string
+        description: "TMDb API Key (必须从 https://www.themoviedb.org/ 申请)"
+    required: ["TMDB_API_KEY"]
     default: {}
   commandFunction: 
     # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
     |-
-    (config) => ({ command: 'node', args: ['bin/cli.js'], env: process.env })
-  exampleConfig: {}
+    (config) => ({ 
+      command: 'node', 
+      args: ['bin/cli.js'], 
+      env: { 
+        ...process.env, 
+        TMDB_API_KEY: config.TMDB_API_KEY 
+      } 
+    })
+  exampleConfig: 
+    TMDB_API_KEY: "your_tmdb_api_key_here"

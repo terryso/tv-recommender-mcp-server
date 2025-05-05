@@ -108,6 +108,18 @@ Alternatively, you can clone the repository:
    npm start
    ```
 
+## Using with Smithery Platform
+
+To use this MCP server on the Smithery platform, follow these steps:
+
+1. Visit the [Smithery platform](https://smithery.ai) and log in to your account
+2. Search for "@terryso/tv-recommender-mcp-server" or directly visit [tv-recommender-mcp-server](https://smithery.ai/server/@terryso/tv-recommender-mcp-server)
+3. Click the "Install" button to install this service
+4. **Important**: During the configuration process, you will need to provide a TMDb API key
+   - You can register and apply for a free API key on the [TMDb](https://www.themoviedb.org/) website
+   - Enter your API key in the input field
+5. After completing the installation, you can use this service in any AI chat that supports Smithery tools
+
 ## Configuring the MCP Server in Cursor
 
 To use this MCP server in Cursor, follow these steps:
