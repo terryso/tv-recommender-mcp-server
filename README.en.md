@@ -10,12 +10,53 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/terryso/tv-recommender-mcp-server/pulls)
 [![smithery badge](https://smithery.ai/badge/@terryso/tv-recommender-mcp-server)](https://smithery.ai/server/@terryso/tv-recommender-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-Documentation-blue)](https://deepwiki.com/terryso/tv-recommender-mcp-server)
 
 > A TV show recommendation MCP server based on the TMDb API, providing recommendations by genre, similar shows, and show details.
 
 ## Project Description
 
 This project is an MCP (Model Context Protocol) server designed to provide comprehensive TV show recommendations and information query services. The server communicates with MCP-enabled clients via standard input/output (stdio) and retrieves data by calling the TMDb (The Movie Database) API. The service covers various aspects, from show discovery and detail queries to watch providers, actor information, and user reviews, offering users a one-stop shop for exploring TV shows.
+
+### Project Background & Vision
+
+Large Language Models (LLMs) excel at understanding and generating text but have limitations in providing real-time, personalized TV show recommendations (such as knowledge cutoffs and lack of understanding of user preferences). Users expect to obtain more accurate and up-to-date recommendations through natural language interactions, but existing LLMs struggle to fully meet this need. This project aims to extend LLM capabilities through the Model Context Protocol (MCP) Server, addressing this pain point and seizing the opportunity to provide a more intelligent media discovery experience.
+
+**Vision:** Enable users to seamlessly discover, understand, and obtain personalized, real-time, explainable TV show recommendations through natural conversations with LLMs, transforming LLMs into powerful personal entertainment advisors.
+
+### Target Users
+
+The primary target users are individuals who are familiar with and use MCP-enabled LLM clients (such as Claude Desktop). They are TV show enthusiasts who are open to obtaining information through AI and wish to discover new shows that match their tastes in a more natural and interactive way.
+
+## System Architecture
+
+This MCP server adopts a modular design with clear separation of concerns. The server initializes the MCP framework, registers various recommendation tools, and uses the TMDb client to interact with the TMDb API. Configuration settings, particularly the TMDb API key, are managed through environment variables.
+
+### High-Level Architecture Diagram
+
+```mermaid
+flowchart TD
+    A["MCP Client<br>(LLM Tool)"] -- "MCP Requests<br>(stdio)" --> B
+    
+    subgraph "Server Architecture"
+    B["MCP Core<br>(stdio)"] --> C["Tool Router"]
+    C --> D["Tool Implementations"]
+    D --> E["TMDb Service Client"]
+    D --> F["Utilities<br>(e.g. Genre Map)"]
+    E -- "HTTP Requests" --> G["TMDb API"]
+    D --> H["Logging Framework"]
+    E --> H
+    end
+    
+    G -- "HTTP Responses" --> E
+    B -- "Sends Responses" --> A
+```
+
+### Core Components
+
+- **MCP Server Implementation**: The server is built on the Model Context Protocol SDK for TypeScript, which provides the foundation for tool registration and client communication.
+- **TMDb Client**: Responsible for all interactions with the TMDb API, handling authentication, constructing API requests, and processing responses.
+- **Recommendation Tools**: The server exposes various tools that provide specific functionalities related to TV show discovery and information retrieval.
 
 ## Features & Roadmap
 
@@ -208,6 +249,16 @@ This MCP server provides the following tools:
 11. **get_show_videos** - Get trailers and related videos for a specified show
 12. **get_show_reviews** - View user reviews for a specific show
 
+### Detailed Tool Documentation
+
+For more detailed documentation on tool usage and system architecture, please visit our [DeepWiki documentation](https://deepwiki.com/terryso/tv-recommender-mcp-server), which includes:
+- Tool implementation architecture
+- Request flow diagrams
+- Deployment and configuration guides
+- Detailed parameter descriptions for each tool
+- Development and testing guides
+- Project roadmap and more
+
 ## Function Examples
 
 Here are usage examples for various tools:
@@ -242,6 +293,13 @@ Here are usage examples for various tools:
 ```
 /TVRecommender get_show_reviews --show_title="Breaking Bad" --page=1
 ```
+
+## Security Considerations
+
+- **API Key Management:** The TMDb API key is sensitive and should not be hardcoded in the source code or committed to version control. It will be loaded exclusively from environment variables using the dotenv package. The `.env` file must be included in `.gitignore`.
+- **Input Validation:** While MCP communication is generally trusted between client/server, basic validation of input parameters is recommended within the tool implementation.
+- **Rate Limiting:** Be mindful of TMDb API rate limits. Implement basic retry logic or caching if necessary in future iterations.
+- **Dependencies:** Keep dependencies updated to patch known vulnerabilities.
 
 ## Development Mode
 
