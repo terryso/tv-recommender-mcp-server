@@ -9,12 +9,53 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/terryso/tv-recommender-mcp-server/pulls)
 [![smithery badge](https://smithery.ai/badge/@terryso/tv-recommender-mcp-server)](https://smithery.ai/server/@terryso/tv-recommender-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-项目文档-blue)](https://deepwiki.com/terryso/tv-recommender-mcp-server)
 
 > 基于TMDb API的美剧推荐MCP服务器，提供按类型推荐、相似剧集推荐和剧集详情功能。
 
 ## 项目描述
 
 本项目是一个基于MCP(Model Context Protocol)的服务器，专门用于提供全面的美剧推荐和信息查询服务。服务器通过标准输入/输出(stdio)与支持MCP的客户端通信，并通过调用TMDb(The Movie Database) API获取数据。服务覆盖从剧集发现、详情查询到观看渠道、演员信息、用户评论等多方面功能，为用户提供一站式剧集探索体验。
+
+### 项目背景与愿景
+
+大型语言模型（LLM）在理解和生成文本方面表现出色，但在提供实时、个性化的美剧推荐方面存在局限性（如知识截止、缺乏用户偏好理解）。用户期望通过自然语言交互获得更精准、更及时的推荐，而现有LLM难以完全满足此需求。本项目旨在通过Model Context Protocol (MCP) Server扩展LLM的能力，解决这一痛点，抓住提供更智能影视发现体验的机会。
+
+**愿景：** 让用户能够通过与LLM的自然对话，无缝地发现、了解并获取个性化、实时、可解释的美剧推荐，将LLM变为强大的个人娱乐顾问。
+
+### 目标用户
+
+主要目标用户是熟悉并使用支持MCP的LLM客户端（如Claude Desktop）的个人用户。他们是美剧爱好者，对通过AI获取信息持开放态度，并希望以更自然、交互的方式发现符合口味的新剧集。
+
+## 系统架构
+
+此MCP服务器采用模块化设计，具有明确的关注点分离。服务器初始化MCP框架，注册各种推荐工具，并使用TMDb客户端与TMDb API交互。配置设置（特别是TMDb API密钥）通过环境变量管理。
+
+### 高级架构图
+
+```mermaid
+flowchart TD
+    A["MCP客户端<br>(LLM工具)"] -- "MCP请求<br>(stdio)" --> B
+    
+    subgraph "服务器架构"
+    B["MCP核心<br>(stdio)"] --> C["工具路由器"]
+    C --> D["工具实现层"]
+    D --> E["TMDb服务客户端"]
+    D --> F["工具辅助功能<br>(如类型映射)"]
+    E -- "HTTP请求" --> G["TMDb API"]
+    D --> H["日志系统"]
+    E --> H
+    end
+    
+    G -- "HTTP响应" --> E
+    B -- "发送响应" --> A
+```
+
+### 核心组件
+
+- **MCP服务器实现**：服务器基于Model Context Protocol SDK for TypeScript构建，提供工具注册和客户端通信的基础。
+- **TMDb客户端**：负责与TMDb API的所有交互，处理认证、构建API请求并处理响应。
+- **推荐工具**：服务器公开各种工具，提供与电视节目发现和信息检索相关的特定功能。
 
 ## 功能与路线图 (Features & Roadmap)
 
@@ -207,6 +248,16 @@ npx tv-recommender-mcp-server
 11. **get_show_videos** - 获取指定剧集的预告片和相关视频
 12. **get_show_reviews** - 查看其他用户对特定剧集的评论
 
+### 工具详细文档
+
+更多关于工具使用和系统架构的详细文档，请访问我们的[DeepWiki文档](https://deepwiki.com/terryso/tv-recommender-mcp-server)，其中包含：
+- 工具实现架构
+- 请求流程图
+- 部署和配置指南
+- 各工具的详细参数说明
+- 开发和测试指南
+- 项目路线图等
+
 ## 功能示例
 
 以下是各工具的使用示例:
@@ -241,6 +292,13 @@ npx tv-recommender-mcp-server
 ```
 /TVRecommender get_show_reviews --show_title="绝命毒师" --page=1
 ```
+
+## 安全考量
+
+- **API Key管理**：TMDb API密钥是敏感的，不应硬编码在源代码中或提交到版本控制系统。它将仅通过环境变量使用dotenv包加载。.env文件必须包含在.gitignore中。
+- **输入验证**：尽管MCP通信通常在客户端/服务器之间受信任，但建议在工具实现中进行基本的输入参数验证。
+- **速率限制**：请注意TMDb API的速率限制。如有必要，请在未来的迭代中实现基本的重试逻辑或缓存。
+- **依赖项**：保持依赖项更新，以修补已知的漏洞。
 
 ## 开发模式
 
