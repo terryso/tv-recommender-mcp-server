@@ -25,11 +25,8 @@ import {
 // 加载环境变量
 dotenv.config();
 
-// 检查必要的环境变量
-if (!config.tmdbApiKey) {
-  console.error('错误: 缺少TMDB_API_KEY环境变量。请在.env文件中设置。');
-  process.exit(1);
-}
+// 移除API密钥检查 - 实现懒加载策略
+// API密钥将在实际调用工具时验证，允许在没有API密钥的情况下列出工具
 
 // 初始化MCP服务器
 const server = new McpServer({

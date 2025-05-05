@@ -14,5 +14,14 @@ COPY . .
 # Build the TypeScript code
 RUN npm run build
 
+# 注意：本服务器使用懒加载模式处理API密钥
+# 工具列表功能不需要API密钥即可工作
+# 只有在实际调用工具时才需要设置TMDB_API_KEY环境变量
+# 
+# 在Docker运行时通过以下方式提供API密钥：
+# docker run -e TMDB_API_KEY=your_api_key_here tv-recommender-mcp-server
+#
+# 在Smithery.ai部署时将通过环境变量提供API密钥
+
 # Command to run the MCP server via stdio
 CMD [ "node", "bin/cli.js" ] 

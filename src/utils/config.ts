@@ -7,7 +7,7 @@ dotenv.config();
  * 配置接口
  */
 export interface Config {
-  tmdbApiKey: string;
+  tmdbApiKey: string | null;
   logLevel: string;
 }
 
@@ -15,16 +15,23 @@ export interface Config {
  * 从环境变量中获取配置
  */
 export function getConfig(): Config {
-  // 验证必要的环境变量
-  const tmdbApiKey = process.env.TMDB_API_KEY;
+  return {
+    tmdbApiKey: process.env.TMDB_API_KEY || null,
+    logLevel: process.env.LOG_LEVEL || 'info'
+  };
+}
+
+/**
+ * 验证API密钥
+ * 只在实际需要使用API时调用此函数
+ * @throws Error 如果API密钥不存在
+ */
+export function validateApiKey(): string {
+  const { tmdbApiKey } = getConfig();
   if (!tmdbApiKey) {
     throw new Error('缺少必要的环境变量: TMDB_API_KEY');
   }
-  
-  return {
-    tmdbApiKey,
-    logLevel: process.env.LOG_LEVEL || 'info'
-  };
+  return tmdbApiKey;
 }
 
 // 导出默认配置

@@ -1,12 +1,13 @@
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
 import TMDbClient from '../../services/tmdbClient';
-import config from '../../utils/config';
+import config, { validateApiKey } from '../../utils/config';
 
 // 模拟axios和config
 jest.mock('axios');
 jest.mock('../../utils/config', () => ({
-  tmdbApiKey: 'mock-api-key'
+  tmdbApiKey: 'mock-api-key',
+  validateApiKey: jest.fn().mockReturnValue('mock-api-key')
 }));
 
 // 使用Mock类型来声明模拟的方法
@@ -23,6 +24,9 @@ describe('TMDbClient Implementation Tests', () => {
   let axiosInstance: MockedAxiosInstance;
 
   beforeEach(() => {
+    // 重置验证API密钥的模拟函数
+    (validateApiKey as jest.Mock).mockClear();
+    
     // 创建一个模拟的axios实例
     axiosInstance = {
       get: jest.fn(),
@@ -43,8 +47,20 @@ describe('TMDbClient Implementation Tests', () => {
     axiosCreateSpy.mockRestore();
   });
 
-  describe('Constructor', () => {
-    it('应该使用正确的配置创建axios实例', () => {
+  describe('Lazy Loading Client', () => {
+    it('初始化时不应该创建axios实例', () => {
+      // 构造函数不应该调用axios.create，应该是懒加载的
+      expect(axiosCreateSpy).not.toHaveBeenCalled();
+      expect(validateApiKey).not.toHaveBeenCalled();
+    });
+
+    it('第一次调用方法时应该创建axios实例', async () => {
+      // 首次调用方法时应该创建axios实例
+      axiosInstance.get.mockResolvedValueOnce({ status: 200 });
+      await client.testConnection();
+      
+      // 验证axios.create被调用，并且只被调用了一次
+      expect(axiosCreateSpy).toHaveBeenCalledTimes(1);
       expect(axiosCreateSpy).toHaveBeenCalledWith({
         baseURL: 'https://api.themoviedb.org/3',
         params: {
@@ -52,17 +68,24 @@ describe('TMDbClient Implementation Tests', () => {
           language: 'zh-CN'
         }
       });
+      
+      // 验证validateApiKey被调用
+      expect(validateApiKey).toHaveBeenCalledTimes(1);
     });
 
-    it('当API密钥未设置时应该抛出错误', () => {
-      // 临时覆盖配置
-      const originalApiKey = config.tmdbApiKey;
-      Object.defineProperty(config, 'tmdbApiKey', { value: '' });
-
-      expect(() => new TMDbClient()).toThrow('TMDb API Key未设置');
-
-      // 恢复配置
-      Object.defineProperty(config, 'tmdbApiKey', { value: originalApiKey });
+    it('后续方法调用应该重用已创建的axios实例', async () => {
+      // 首次调用
+      axiosInstance.get.mockResolvedValue({ status: 200 });
+      await client.testConnection();
+      
+      // 重置axios.create的调用计数
+      axiosCreateSpy.mockClear();
+      (validateApiKey as jest.Mock).mockClear();
+      
+      // 再次调用，不应该再创建新实例
+      await client.getConfiguration();
+      expect(axiosCreateSpy).not.toHaveBeenCalled();
+      expect(validateApiKey).not.toHaveBeenCalled();
     });
   });
 

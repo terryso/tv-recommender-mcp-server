@@ -1,29 +1,33 @@
 import axios, { type AxiosInstance } from 'axios';
-import config from '../utils/config';
+import config, { validateApiKey } from '../utils/config';
 
 /**
  * TMDb API客户端类
  * 用于与The Movie Database API进行交互
  */
 class TMDbClient {
-  private client: AxiosInstance;
-  private apiKey: string;
+  private client: AxiosInstance | null = null;
   
-  constructor() {
-    this.apiKey = config.tmdbApiKey;
-    
-    if (!this.apiKey) {
-      throw new Error('TMDb API Key未设置，请在.env文件中配置TMDB_API_KEY');
+  /**
+   * 获取或创建API客户端
+   * 懒加载模式 - 仅在需要时创建客户端
+   */
+  private getClient(): AxiosInstance {
+    if (!this.client) {
+      // 验证API密钥
+      const apiKey = validateApiKey();
+      
+      // 创建Axios实例
+      this.client = axios.create({
+        baseURL: 'https://api.themoviedb.org/3',
+        params: {
+          api_key: apiKey,
+          language: 'zh-CN' // 默认使用中文
+        }
+      });
     }
     
-    // 创建Axios实例
-    this.client = axios.create({
-      baseURL: 'https://api.themoviedb.org/3',
-      params: {
-        api_key: this.apiKey,
-        language: 'zh-CN' // 默认使用中文
-      }
-    });
+    return this.client;
   }
   
   /**
@@ -32,7 +36,7 @@ class TMDbClient {
    */
   async testConnection(): Promise<boolean> {
     try {
-      const response = await this.client.get('/configuration');
+      const response = await this.getClient().get('/configuration');
       return response.status === 200;
     } catch (error) {
       // console.error('TMDb API连接测试失败:', error);
@@ -45,7 +49,7 @@ class TMDbClient {
    */
   async getConfiguration() {
     try {
-      const response = await this.client.get('/configuration');
+      const response = await this.getClient().get('/configuration');
       return response.data;
     } catch (error) {
       // 记录错误并重新抛出
@@ -60,7 +64,7 @@ class TMDbClient {
    */
   async searchTvShow(query: string) {
     try {
-      const response = await this.client.get('/search/tv', {
+      const response = await this.getClient().get('/search/tv', {
         params: {
           query
         }
@@ -81,7 +85,7 @@ class TMDbClient {
    */
   async getRecommendationsByGenre(genreId: number, limit = 10) {
     try {
-      const response = await this.client.get('/discover/tv', {
+      const response = await this.getClient().get('/discover/tv', {
         params: {
           with_genres: genreId,
           sort_by: 'vote_average.desc', // 按评分降序排序
@@ -107,7 +111,7 @@ class TMDbClient {
    */
   async getTvGenres() {
     try {
-      const response = await this.client.get('/genre/tv/list');
+      const response = await this.getClient().get('/genre/tv/list');
       return response.data;
     } catch (error) {
       // 记录错误并重新抛出
@@ -123,7 +127,7 @@ class TMDbClient {
    */
   async searchTvShowByTitle(title: string) {
     try {
-      const response = await this.client.get('/search/tv', {
+      const response = await this.getClient().get('/search/tv', {
         params: {
           query: title,
           page: 1
@@ -145,7 +149,7 @@ class TMDbClient {
    */
   async getSimilarTvShows(tvId: number, limit = 10) {
     try {
-      const response = await this.client.get(`/tv/${tvId}/similar`);
+      const response = await this.getClient().get(`/tv/${tvId}/similar`);
       
       // 限制返回结果数量
       response.data.results = response.data.results.slice(0, limit);
@@ -166,7 +170,7 @@ class TMDbClient {
    */
   async getTvShowWatchProviders(tvId: number, countryCode = 'US') {
     try {
-      const response = await this.client.get(`/tv/${tvId}/watch/providers`);
+      const response = await this.getClient().get(`/tv/${tvId}/watch/providers`);
       const results = response.data.results || {};
       
       // 返回指定国家/地区的观看渠道信息，如果没有则返回空对象
@@ -188,7 +192,7 @@ class TMDbClient {
    */
   async discoverTvShows(params: Record<string, string | number | boolean | string[] | number[]> = {}) {
     try {
-      const response = await this.client.get('/discover/tv', {
+      const response = await this.getClient().get('/discover/tv', {
         params: {
           ...params,
           page: params.page || 1
@@ -207,7 +211,7 @@ class TMDbClient {
    */
   async searchPerson(query: string) {
     try {
-      const response = await this.client.get('/search/person', {
+      const response = await this.getClient().get('/search/person', {
         params: { query }
       });
       return response.data;
@@ -223,7 +227,7 @@ class TMDbClient {
    */
   async searchKeyword(query: string) {
     try {
-      const response = await this.client.get('/search/keyword', {
+      const response = await this.getClient().get('/search/keyword', {
         params: { query }
       });
       return response.data;
@@ -239,7 +243,7 @@ class TMDbClient {
    */
   async getPersonDetails(personId: number) {
     try {
-      const response = await this.client.get(`/person/${personId}`);
+      const response = await this.getClient().get(`/person/${personId}`);
       return response.data;
     } catch (error) {
       throw new Error(`获取人物ID ${personId} 的详细信息失败: ${error instanceof Error ? error.message : String(error)}`);
@@ -254,7 +258,7 @@ class TMDbClient {
     try {
       // TMDb没有提供networks列表的API，但我们可以通过公司companies接口获取部分数据
       // 这里简化处理，实际应用中可能需要维护一个常用networks的映射表
-      const response = await this.client.get('/watch/providers/tv');
+      const response = await this.getClient().get('/watch/providers/tv');
       return response.data;
     } catch (error) {
       throw new Error(`获取电视网络列表失败: ${error instanceof Error ? error.message : String(error)}`);
@@ -268,7 +272,7 @@ class TMDbClient {
    */
   async getPersonTvCredits(personId: number) {
     try {
-      const response = await this.client.get(`/person/${personId}/tv_credits`);
+      const response = await this.getClient().get(`/person/${personId}/tv_credits`);
       return response.data;
     } catch (error) {
       throw new Error(`获取人物ID ${personId} 的电视剧作品失败: ${error instanceof Error ? error.message : String(error)}`);
@@ -283,7 +287,7 @@ class TMDbClient {
    */
   async getTvShowReviews(tvId: number, page = 1) {
     try {
-      const response = await this.client.get(`/tv/${tvId}/reviews`, {
+      const response = await this.getClient().get(`/tv/${tvId}/reviews`, {
         params: { page }
       });
       return response.data;
@@ -299,7 +303,7 @@ class TMDbClient {
    */
   async getPopularTvShows(page = 1) {
     try {
-      const response = await this.client.get('/tv/popular', {
+      const response = await this.getClient().get('/tv/popular', {
         params: { page }
       });
       return response.data;
@@ -316,7 +320,7 @@ class TMDbClient {
    */
   async getTrendingTvShows(timeWindow: 'day' | 'week' = 'week', page = 1) {
     try {
-      const response = await this.client.get(`/trending/tv/${timeWindow}`, {
+      const response = await this.getClient().get(`/trending/tv/${timeWindow}`, {
         params: { page }
       });
       return response.data;
@@ -332,7 +336,7 @@ class TMDbClient {
    */
   async getTvShowVideos(tvId: number) {
     try {
-      const response = await this.client.get(`/tv/${tvId}/videos`);
+      const response = await this.getClient().get(`/tv/${tvId}/videos`);
       return response.data;
     } catch (error) {
       throw new Error(`获取剧集ID ${tvId} 的预告片和视频失败: ${error instanceof Error ? error.message : String(error)}`);

@@ -1,4 +1,4 @@
-import { getConfig } from '../../utils/config';
+import { getConfig, validateApiKey } from '../../utils/config';
 
 // 模拟dotenv
 jest.mock('dotenv', () => ({
@@ -32,7 +32,7 @@ describe('Config Utils', () => {
     process.env = originalEnv;
   });
 
-  it('应该正确获取配置，包含必要的环境变量', () => {
+  it('应该正确获取配置，包含所有环境变量', () => {
     // 设置测试用的环境变量
     process.env.TMDB_API_KEY = 'test-api-key';
     
@@ -42,20 +42,29 @@ describe('Config Utils', () => {
     expect(config).toHaveProperty('logLevel', 'info'); // 默认值
   });
 
-  it('应该在TMDB_API_KEY未设置时抛出错误', () => {
-    // 创建一个不包含TMDB_API_KEY的新环境，而不是修改现有的
+  it('getConfig不应该在TMDB_API_KEY未设置时抛出错误', () => {
+    // 测试API密钥未设置的情况
     process.env = { ...originalEnv };
-    process.env.TMDB_API_KEY = undefined;
+    delete process.env.TMDB_API_KEY;
     
-    // 应该抛出错误，但我们不能直接调用getConfig()，
-    // 因为我们已经模拟了config模块，而是测试错误处理逻辑
-    const testErrorCase = () => {
-      if (!process.env.TMDB_API_KEY) {
-        throw new Error('缺少必要的环境变量: TMDB_API_KEY');
-      }
-    };
+    const config = getConfig();
+    expect(config.tmdbApiKey).toBeNull();
+  });
+
+  it('validateApiKey应该在API密钥未设置时抛出错误', () => {
+    // 测试API密钥未设置时验证函数的行为
+    process.env = { ...originalEnv };
+    delete process.env.TMDB_API_KEY;
     
-    expect(testErrorCase).toThrow('缺少必要的环境变量: TMDB_API_KEY');
+    expect(() => validateApiKey()).toThrow('缺少必要的环境变量: TMDB_API_KEY');
+  });
+
+  it('validateApiKey应该在API密钥已设置时返回密钥', () => {
+    // 测试API密钥已设置时验证函数的行为
+    process.env.TMDB_API_KEY = 'valid-key';
+    
+    const apiKey = validateApiKey();
+    expect(apiKey).toBe('valid-key');
   });
 
   it('应该使用自定义的LOG_LEVEL环境变量', () => {

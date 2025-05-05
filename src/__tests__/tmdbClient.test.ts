@@ -1,16 +1,11 @@
 import axios from 'axios';
 import TMDbClient, { tmdbClient } from '../services/tmdbClient';
-import config from '../utils/config';
+import { validateApiKey } from '../utils/config';
 
-// 获取真实 tmdbClient 实例，我们需要测试其实际实例而不是创建新实例
-jest.mock('../services/tmdbClient', () => {
-  const actual = jest.requireActual('../services/tmdbClient');
-  return {
-    ...actual,
-    // 保持默认导出和单例导出
-    tmdbClient: actual.tmdbClient
-  };
-});
+// 模拟validateApiKey函数
+jest.mock('../utils/config', () => ({
+  validateApiKey: jest.fn().mockReturnValue('test-api-key')
+}));
 
 // 模拟 axios
 jest.mock('axios', () => {
@@ -21,21 +16,33 @@ jest.mock('axios', () => {
   };
 });
 
-// 模拟配置
-jest.mock('../utils/config', () => ({
-  tmdbApiKey: 'test-api-key'
-}));
-
 describe('TMDbClient', () => {
   let mockAxiosGet: jest.Mock;
+  let mockAxiosClient: any;
 
   beforeEach(() => {
     // 重置所有模拟
     jest.clearAllMocks();
     
-    // 获取已创建的 axios 实例的 get 方法
-    const mockAxiosInstance = (tmdbClient as unknown as { client: { get: jest.Mock } }).client;
-    mockAxiosGet = mockAxiosInstance.get;
+    // 创建模拟的axios客户端实例
+    mockAxiosClient = {
+      get: jest.fn()
+    };
+    
+    // 模拟axios.create返回我们控制的客户端
+    (axios.create as jest.Mock).mockReturnValue(mockAxiosClient);
+    
+    // 确保client属性是null，这样会触发懒加载
+    Object.defineProperty(tmdbClient, 'client', {
+      value: null,
+      writable: true
+    });
+    
+    // 通过调用一个方法触发懒加载
+    tmdbClient.testConnection();
+    
+    // 现在可以获取get方法
+    mockAxiosGet = mockAxiosClient.get;
   });
 
   it('测试连接应该返回正确结果', async () => {
