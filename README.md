@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/terryso-tv-recommender-mcp-server-badge.png)](https://mseep.ai/app/terryso-tv-recommender-mcp-server)
+
 [English Version](README.en.md)
 
 # TV推荐MCP服务器 🚀
