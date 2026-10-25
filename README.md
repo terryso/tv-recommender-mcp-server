@@ -7,7 +7,7 @@
 ![NPM Downloads](https://img.shields.io/npm/dw/tv-recommender-mcp-server)
 [![Node.js Version](https://img.shields.io/node/v/tv-recommender-mcp-server)](https://nodejs.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/terryso/tv-recommender-mcp-server/pulls)
-[![smithery badge](https://smithery.ai/badge/@terryso/tv-recommender-mcp-server)](https://smithery.ai/server/@terryso/tv-recommender-mcp-server)
+[![LightNow capabilities](https://lightnow.ai/badge/io.github.terryso/tv-recommender-mcp-server)](https://lightnow.ai/servers/io.github.terryso/tv-recommender-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-项目文档-blue)](https://deepwiki.com/terryso/tv-recommender-mcp-server)
 
